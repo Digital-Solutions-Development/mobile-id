@@ -74,7 +74,7 @@
   .step-header { padding: 16px 24px 0; display: flex; flex-direction: column; gap: 10px; }
   .step-header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
   .step-count { font: 600 16px/1.3 var(--sans); color: var(--ink-2); }
-  .progress { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .progress span { height: 6px; border-radius: 3px; background: var(--off); }
   .progress span.done { background: var(--navy); }
   legend { width: 100%; }
@@ -99,6 +99,18 @@
   .card:has(input:checked) .art { outline: 4px solid var(--navy); outline-offset: 2px; }
   .card .rank { display: none; position: absolute; top: 7px; left: 7px; min-width: 32px; min-height: 32px; padding: 0 9px; border-radius: 999px; background: var(--navy); color: var(--white); border: 2px solid var(--white); font: 800 16px/28px var(--sans); text-align: center; }
   .card:has(input:checked) .rank { display: block; }
+
+
+  /* Step 2: three designs, compact rows so all three fit on one phone screen */
+  .design-list { padding: 12px 24px 0; display: flex; flex-direction: column; gap: 12px; }
+  .design-list[hidden] { display: none; }
+  .design { border-radius: 12px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 14px; align-items: center; }
+  .design .art { position: relative; display: block; aspect-ratio: 1.586; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(35,43,95,.18); }
+  .design .art img { width: 100%; height: 100%; object-fit: cover; }
+  .design .tick { display: none; position: absolute; top: 7px; right: 7px; width: 30px; height: 30px; border-radius: 50%; background: var(--navy); color: var(--white); border: 2px solid var(--white); font: 800 15px/26px var(--sans); text-align: center; }
+  .design:has(input:checked) .art { outline: 4px solid var(--navy); outline-offset: 2px; }
+  .design:has(input:checked) .tick { display: block; }
+  .design-name { display: block; font: 700 17px/1.3 var(--sans); }
 
   /* Single-choice answers (radio) */
   .choice-list { padding: 14px 24px 0; display: flex; flex-direction: column; gap: 10px; }
@@ -136,7 +148,7 @@
       <div class="block" style="padding-top:28px;display:flex;flex-direction:column;gap:16px;flex:1">
         <h1 class="title-xl" tabindex="-1">Help us design the NC Mobile ID</h1>
         <p class="lead">Select card art that will launch with the NC Wallet app, and share your thoughts on mobile ID.</p>
-        <p class="hint">Three short steps. About 2 minutes. No sign-in needed.</p>
+        <p class="hint">Four short steps. About 2 minutes. No sign-in needed.</p>
       </div>
       <div class="bottom-row">
         <button type="button" class="btn" data-go="cards">Get started</button>
@@ -146,13 +158,13 @@
 
     <!-- ======================= STEP 1: CARD ART ======================= -->
     <!-- data-max-picks sets how many cards people can choose -->
-    <section class="screen" data-screen="cards" data-step="1" data-title="Step 1 of 3: Pick card art" data-max-picks="3" hidden>
+    <section class="screen" data-screen="cards" data-step="1" data-title="Step 1 of 4: Pick card art" data-max-picks="3" hidden>
       <div class="step-header">
         <div class="step-header-row">
           <button type="button" class="btn-link" data-go="intro"><span aria-hidden="true">←</span>Back</button>
-          <p class="step-count">Step 1 of 3</p>
+          <p class="step-count">Step 1 of 4</p>
         </div>
-        <div class="progress" aria-hidden="true"><span class="done"></span><span></span><span></span></div>
+        <div class="progress" aria-hidden="true"><span class="done"></span><span></span><span></span><span></span></div>
       </div>
 
       <fieldset aria-describedby="cards-hint">
@@ -160,29 +172,22 @@
           <h1 class="title" tabindex="-1">Pick your favorite card art</h1>
           <span class="hint" id="cards-hint" style="display:block">Tap up to 3, in order of preference. Tap again to remove.</span>
         </legend>
-        <!-- Each card: value="" is what's saved to the sheet (must match CARDS in Code.gs). alt="" is what screen readers say. -->
+        <!-- Each card is a subject's #1 design. value="" is "Subject · Design" and must match BALLOON_ROWS in Code.gs. -->
         <div class="card-grid">
-          <label class="opt card"><input type="checkbox" name="picks" value="Cardinal in the Dogwoods"><span class="art"><img src="cards/card-11.webp" alt="Cardinal in the Dogwoods"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Moonlit Dogwood"><span class="art"><img src="cards/card-44.webp" alt="Moonlit Dogwood"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="The Parkway"><span class="art"><img src="cards/card-12.webp" alt="The Parkway"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Ridge After Ridge"><span class="art"><img src="cards/card-23.webp" alt="Ridge After Ridge"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Smoky Morning"><span class="art"><img src="cards/card-43.webp" alt="Smoky Morning"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Fair Night"><span class="art"><img src="cards/card-13.webp" alt="Fair Night"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Sound &amp; Sea Grass"><span class="art"><img src="cards/card-14.webp" alt="Sound and Sea Grass"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Hatteras Light"><span class="art"><img src="cards/card-41.webp" alt="Hatteras Light"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Ice Night"><span class="art"><img src="cards/card-21.webp" alt="Ice Night"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Hoops at Dawn"><span class="art"><img src="cards/card-22.webp" alt="Hoops at Dawn"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Flytrap Field"><span class="art"><img src="cards/card-24.webp" alt="Flytrap Field"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Flytrap Study"><span class="art"><img src="cards/card-31.webp" alt="Flytrap Study"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Flytrap Deco"><span class="art"><img src="cards/card-32.webp" alt="Flytrap Deco"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Whole Hog"><span class="art"><img src="cards/card-33.webp" alt="Whole Hog"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Hog &amp; Bandana"><span class="art"><img src="cards/card-34.webp" alt="Hog and Bandana"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="Smoked With Care"><span class="art"><img src="cards/card-51.webp" alt="Smoked With Care"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-          <label class="opt card"><input type="checkbox" name="picks" value="First in Flight"><span class="art"><img src="cards/card-42.webp" alt="First in Flight"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Blue Ridge Mountains · Gold poster"><span class="art"><img src="cards/blueridge-1.webp" alt="Blue Ridge Mountains"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Linn Cove Viaduct · Red sun poster"><span class="art"><img src="cards/linncove-1.webp" alt="Linn Cove Viaduct"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Agriculture · Sunny farm"><span class="art"><img src="cards/agriculture-1.webp" alt="Agriculture"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Barn Quilt · Watercolor autumn"><span class="art"><img src="cards/barnquilt-1.webp" alt="Barn Quilt"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Coastal · Hatteras blue"><span class="art"><img src="cards/coastal-hatteras-blue.webp" alt="Coastal"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Cape Hatteras · Bold blue"><span class="art"><img src="cards/hatteras-1.webp" alt="Cape Hatteras"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Venus Fly Trap · Neon on black"><span class="art"><img src="cards/flytrap-4.webp" alt="Venus Fly Trap"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="First in Flight · Sunburst"><span class="art"><img src="cards/flight-1.webp" alt="First in Flight"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Bluegrass · Banjo"><span class="art"><img src="cards/bluegrass-3.webp" alt="Bluegrass"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Sweet Potatoes · Truck bed"><span class="art"><img src="cards/sweetpotato-1.webp" alt="Sweet Potatoes"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
         </div>
       </fieldset>
 
-      <div class="text-field">
+      <div class="text-field" style="padding-top:84px">
         <label class="field-label" for="cardNote">Anything you'd change about the designs? <span class="optional">(optional)</span></label>
         <textarea id="cardNote" name="cardNote" rows="3" maxlength="1000"></textarea>
       </div>
@@ -190,18 +195,95 @@
       <div class="spacer"></div>
       <div class="step-footer">
         <p class="status" role="status" aria-live="polite" data-empty="Pick at least one" data-error="Pick at least one card to continue." data-limit="You can pick up to 3. Tap a pick to remove it first."></p>
+        <button type="button" class="btn" data-next="design">Next<span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <!-- ===================== STEP 2: BEST VERSION ===================== -->
+    <!-- One group per subject. Only the group for the person's 1st pick is shown.
+         data-variations-for must match that subject's value in step 1; value="" must match BALLOON_ROWS in Code.gs. -->
+    <section class="screen" data-screen="design" data-step="2" data-title="Step 2 of 4: Pick the best version" hidden>
+      <div class="step-header">
+        <div class="step-header-row">
+          <button type="button" class="btn-link" data-go="cards"><span aria-hidden="true">←</span>Back</button>
+          <p class="step-count">Step 2 of 4</p>
+        </div>
+        <div class="progress" aria-hidden="true"><span class="done"></span><span class="done"></span><span></span><span></span></div>
+      </div>
+
+      <fieldset aria-describedby="design-hint">
+        <legend class="question-head">
+          <span class="eyebrow">Your 1st pick: <span data-top-subject></span></span>
+          <h1 class="title" tabindex="-1">Which version do you like best?</h1>
+          <span class="hint" id="design-hint" style="display:block">Same subject, three styles. Pick one.</span>
+        </legend>
+        <div class="design-list" data-variations-for="Blue Ridge Mountains · Gold poster" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Blue Ridge Mountains · Gold poster"><span class="art"><img src="cards/blueridge-1.webp" alt="Blue Ridge Mountains, Gold poster"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Gold poster</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Blue Ridge Mountains · Teal &amp; coral"><span class="art"><img src="cards/blueridge-2.webp" alt="Blue Ridge Mountains, Teal &amp; coral"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Teal &amp; coral</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Blue Ridge Mountains · Hot sunset"><span class="art"><img src="cards/blueridge-hot-sunset.webp" alt="Blue Ridge Mountains, Hot sunset"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Hot sunset</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Linn Cove Viaduct · Red sun poster" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Linn Cove Viaduct · Red sun poster"><span class="art"><img src="cards/linncove-1.webp" alt="Linn Cove Viaduct, Red sun poster"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Red sun poster</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Linn Cove Viaduct · Teal &amp; coral"><span class="art"><img src="cards/linncove-teal.webp" alt="Linn Cove Viaduct, Teal &amp; coral"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Teal &amp; coral</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Linn Cove Viaduct · Clear autumn day"><span class="art"><img src="cards/linncove-autumn-day.webp" alt="Linn Cove Viaduct, Clear autumn day"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Clear autumn day</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Agriculture · Sunny farm" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Agriculture · Sunny farm"><span class="art"><img src="cards/agriculture-1.webp" alt="Agriculture, Sunny farm"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Sunny farm</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Agriculture · Pig &amp; bandana"><span class="art"><img src="cards/agriculture-2.webp" alt="Agriculture, Pig &amp; bandana"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Pig &amp; bandana</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Agriculture · Vintage print"><span class="art"><img src="cards/agriculture-vintage.webp" alt="Agriculture, Vintage print"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Vintage print</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Barn Quilt · Watercolor autumn" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Barn Quilt · Watercolor autumn"><span class="art"><img src="cards/barnquilt-1.webp" alt="Barn Quilt, Watercolor autumn"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Watercolor autumn</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Barn Quilt · Red sky"><span class="art"><img src="cards/barnquilt-2.webp" alt="Barn Quilt, Red sky"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Red sky</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Barn Quilt · Navy &amp; gold"><span class="art"><img src="cards/barnquilt-navy-gold.webp" alt="Barn Quilt, Navy &amp; gold"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Navy &amp; gold</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Coastal · Hatteras blue" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Coastal · Hatteras blue"><span class="art"><img src="cards/coastal-hatteras-blue.webp" alt="Coastal, Hatteras blue"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Hatteras blue</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Coastal · Watercolor kites"><span class="art"><img src="cards/coastal-1.webp" alt="Coastal, Watercolor kites"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Watercolor kites</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Coastal · Red sky"><span class="art"><img src="cards/coastal-2.webp" alt="Coastal, Red sky"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Red sky</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Cape Hatteras · Bold blue" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Cape Hatteras · Bold blue"><span class="art"><img src="cards/hatteras-1.webp" alt="Cape Hatteras, Bold blue"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Bold blue</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Cape Hatteras · Faded print"><span class="art"><img src="cards/hatteras-2.webp" alt="Cape Hatteras, Faded print"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Faded print</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Cape Hatteras · Teal poster"><span class="art"><img src="cards/hatteras-3.webp" alt="Cape Hatteras, Teal poster"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Teal poster</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Venus Fly Trap · Neon on black" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Venus Fly Trap · Neon on black"><span class="art"><img src="cards/flytrap-4.webp" alt="Venus Fly Trap, Neon on black"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Neon on black</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Venus Fly Trap · Watercolor"><span class="art"><img src="cards/flytrap-1.webp" alt="Venus Fly Trap, Watercolor"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Watercolor</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Venus Fly Trap · Cosmic"><span class="art"><img src="cards/flytrap-2.webp" alt="Venus Fly Trap, Cosmic"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Cosmic</span></label>
+        </div>
+        <div class="design-list" data-variations-for="First in Flight · Sunburst" hidden>
+          <label class="opt design"><input type="radio" name="design" value="First in Flight · Sunburst"><span class="art"><img src="cards/flight-1.webp" alt="First in Flight, Sunburst"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Sunburst</span></label>
+          <label class="opt design"><input type="radio" name="design" value="First in Flight · Clean sky"><span class="art"><img src="cards/flight-4.webp" alt="First in Flight, Clean sky"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Clean sky</span></label>
+          <label class="opt design"><input type="radio" name="design" value="First in Flight · Sunset rays"><span class="art"><img src="cards/flight-5.webp" alt="First in Flight, Sunset rays"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Sunset rays</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Bluegrass · Banjo" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Bluegrass · Banjo"><span class="art"><img src="cards/bluegrass-3.webp" alt="Bluegrass, Banjo"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Banjo</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Bluegrass · Porch band"><span class="art"><img src="cards/bluegrass-1.webp" alt="Bluegrass, Porch band"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Porch band</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Bluegrass · Fiddle on the porch"><span class="art"><img src="cards/bluegrass-4.webp" alt="Bluegrass, Fiddle on the porch"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Fiddle on the porch</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Sweet Potatoes · Truck bed" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Truck bed"><span class="art"><img src="cards/sweetpotato-1.webp" alt="Sweet Potatoes, Truck bed"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Truck bed</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Close-up"><span class="art"><img src="cards/sweetpotato-3.webp" alt="Sweet Potatoes, Close-up"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Close-up</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Vintage print"><span class="art"><img src="cards/sweetpotato-vintage.webp" alt="Sweet Potatoes, Vintage print"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Vintage print</span></label>
+        </div>
+      </fieldset>
+
+      <div class="spacer"></div>
+      <div class="step-footer">
+        <p class="status" role="status" aria-live="polite" data-empty="Choose a version" data-error="Choose a version to continue."></p>
         <button type="button" class="btn" data-next="interest">Next<span aria-hidden="true">→</span></button>
       </div>
     </section>
 
-    <!-- ===================== STEP 2: MOBILE ID ===================== -->
-    <section class="screen" data-screen="interest" data-step="2" data-title="Step 2 of 3: Would you use a mobile ID?" hidden>
+    <!-- ===================== STEP 3: MOBILE ID ===================== -->
+    <section class="screen" data-screen="interest" data-step="2" data-title="Step 3 of 4: Would you use a mobile ID?" hidden>
       <div class="step-header">
         <div class="step-header-row">
-          <button type="button" class="btn-link" data-go="cards"><span aria-hidden="true">←</span>Back</button>
-          <p class="step-count">Step 2 of 3</p>
+          <button type="button" class="btn-link" data-go="design"><span aria-hidden="true">←</span>Back</button>
+          <p class="step-count">Step 3 of 4</p>
         </div>
-        <div class="progress" aria-hidden="true"><span class="done"></span><span class="done"></span><span></span></div>
+        <div class="progress" aria-hidden="true"><span class="done"></span><span class="done"></span><span class="done"></span><span></span></div>
       </div>
 
       <!-- data-branch picks which follow-up question appears in step 3: yes, maybe, or no -->
@@ -219,8 +301,8 @@
         </div>
       </fieldset>
 
-      <fieldset class="block" style="padding-top:30px;display:flex;flex-direction:column;gap:12px">
-        <legend class="field-label" style="padding-bottom:12px">Where would you want to use it? <span class="optional">(pick any/all)</span></legend>
+      <fieldset class="block" style="margin-top:44px">
+        <legend class="field-label" style="padding-bottom:10px">Where would you want to use it? <span class="optional">(pick any/all)</span></legend>
         <div class="chip-grid">
           <label class="opt chip"><input type="checkbox" name="uses" value="Airport security (TSA)"><span class="box" aria-hidden="true"></span>Airport security (TSA)</label>
           <label class="opt chip"><input type="checkbox" name="uses" value="Traffic stops"><span class="box" aria-hidden="true"></span>Traffic stops</label>
@@ -240,16 +322,16 @@
       </div>
     </section>
 
-    <!-- ===================== STEP 3: FOLLOW-UP ===================== -->
+    <!-- ===================== STEP 4: FOLLOW-UP ===================== -->
     <!-- Only the group matching the step 2 answer is shown. -->
-    <section class="screen" data-screen="followup" data-step="3" data-title="Step 3 of 3: Questions and concerns" hidden>
+    <section class="screen" data-screen="followup" data-step="3" data-title="Step 4 of 4: Questions and concerns" hidden>
       <div class="trap" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
       <div class="step-header">
         <div class="step-header-row">
           <button type="button" class="btn-link" data-go="interest"><span aria-hidden="true">←</span>Back</button>
-          <p class="step-count">Step 3 of 3</p>
+          <p class="step-count">Step 4 of 4</p>
         </div>
-        <div class="progress" aria-hidden="true"><span class="done"></span><span class="done"></span><span class="done"></span></div>
+        <div class="progress" aria-hidden="true"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div>
       </div>
 
       <fieldset data-branch-group="yes" hidden>
@@ -339,7 +421,7 @@
   // ---------- Settings ----------
   var SHEET_URL = 'https://script.google.com/macros/s/AKfycbwvGXtYDzdJAM0dCPXz5zWIiuHFVIELJYgbDgFQSrKOMBsDzrMsPTXKeXa2ZqZoCMy0tg/exec';
   var TOKEN = 'ncmid-fair-2026';  // must match TOKEN in Code.gs
-  var DRAFT_KEY = 'ncmid-feedback-draft-v3', OUTBOX_KEY = 'ncmid-feedback-outbox', DEVICE_KEY = 'ncmid-device';
+  var DRAFT_KEY = 'ncmid-feedback-draft-v4', OUTBOX_KEY = 'ncmid-feedback-outbox', DEVICE_KEY = 'ncmid-device';
 
   var form = document.getElementById('survey');
   var screens = form.querySelectorAll('[data-screen]');
@@ -360,6 +442,7 @@
     current = name;
     screens.forEach(function (s) { s.hidden = s.dataset.screen !== name; });
     if (name === 'followup') showBranch();
+    if (name === 'design') showDesigns();
     if (name === 'thanks') showTopPick();
     document.title = screenEl(name).dataset.title + ' – NC DMV';
     window.scrollTo(0, 0);
@@ -383,8 +466,21 @@
     form.querySelectorAll('[data-said-text]').forEach(function (s) { s.textContent = r ? r.dataset.said : ''; });
   }
 
+  function selectedDesign() { return form.querySelector('input[name="design"]:checked:not(:disabled)'); }
+
+  function showDesigns() {
+    form.querySelectorAll('[data-variations-for]').forEach(function (g) {
+      var on = g.dataset.variationsFor === picks[0];
+      g.hidden = !on;
+      g.querySelectorAll('input').forEach(function (i) { i.disabled = !on; if (!on) i.checked = false; });
+    });
+    var top = picks[0] ? picks[0].split(' · ')[0] : '';
+    form.querySelectorAll('[data-top-subject]').forEach(function (s) { s.textContent = top; });
+  }
+
   function canContinue(name) {
     if (name === 'cards') return picks.length > 0;
+    if (name === 'design') return !!selectedDesign();
     if (name === 'interest') return !!selectedInterest();
     return true;
   }
@@ -397,6 +493,7 @@
     if (message) { s.textContent = message; return; }
     if (current === 'cards') s.textContent = picks.length ? picks.length + ' of ' + MAX + ' picked' : s.dataset.empty;
     if (current === 'interest') s.textContent = selectedInterest() ? '' : s.dataset.empty;
+    if (current === 'design') s.textContent = selectedDesign() ? '' : s.dataset.empty;
   }
 
   // ---------- Card ranking ----------
@@ -451,7 +548,8 @@
   // ---------- Thank-you screen ----------
   function showTopPick() {
     var fig = form.querySelector('.top-pick'), img = document.getElementById('top-pick-img');
-    var input = picks[0] && Array.prototype.find.call(form.querySelectorAll('input[name="picks"]'), function (i) { return i.value === picks[0]; });
+    var d = selectedDesign();
+    var input = d || (picks[0] && Array.prototype.find.call(form.querySelectorAll('input[name="picks"]'), function (i) { return i.value === picks[0]; }));
     fig.hidden = !input;
     if (input) { var src = input.parentNode.querySelector('img'); img.src = src.src; img.alt = src.alt; }
   }
@@ -461,6 +559,7 @@
     write(DRAFT_KEY, {
       screen: current, picks: picks, startedAt: startedAt,
       interest: (selectedInterest() || {}).value || '',
+      design: (selectedDesign() || {}).value || '',
       uses: checked('uses'), concerns: checked('concerns'),
       cardNote: form.cardNote.value, questions: form.questions.value
     });
@@ -471,6 +570,8 @@
     picks = (d.picks || []).filter(function (v) { return form.querySelector('input[name="picks"][value="' + CSS.escape(v) + '"]'); }).slice(0, MAX);
     startedAt = d.startedAt || 0;
     form.querySelectorAll('input[name="interest"]').forEach(function (r) { r.checked = r.value === d.interest; });
+    showDesigns();
+    form.querySelectorAll('input[name="design"]').forEach(function (r) { r.checked = !r.disabled && r.value === d.design; });
     form.querySelectorAll('input[name="uses"]').forEach(function (c) { c.checked = (d.uses || []).indexOf(c.value) >= 0; });
     form.querySelectorAll('input[name="concerns"]').forEach(function (c) { c.checked = (d.concerns || []).indexOf(c.value) >= 0; });
     form.cardNote.value = d.cardNote || ''; form.questions.value = d.questions || '';
@@ -509,13 +610,14 @@
       id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2),
       at: new Date().toISOString(),
       picks: picks.slice(),
+      design: (selectedDesign() || {}).value || '',
       cardNote: form.cardNote.value,
       interest: r ? r.value : '',
       uses: checked('uses'),
       branch: r ? r.dataset.branch : '',
       concerns: checked('concerns'),
       questions: form.questions.value,
-      v: 3, k: TOKEN, hp: form.website.value, device: deviceId(),
+      v: 4, k: TOKEN, hp: form.website.value, device: deviceId(),
       secs: startedAt ? Math.round((Date.now() - startedAt) / 1000) : null,
       tz: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
       lang: navigator.language || '', ua: (navigator.userAgent || '').slice(0, 300),
