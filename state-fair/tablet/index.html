@@ -323,6 +323,7 @@
   var DARTS = 5;                     // darts per set of three (must match BALLOON_DARTS in Code.gs)
   var FINAL_DARTS = 3;               // darts in the final round (must match FINAL_DARTS in Code.gs)
   var REFINE_DARTS = 3;              // darts in each "best version" round (must match REFINE_DARTS in Code.gs)
+  var RESULTS_RESET_SECONDS = 60;    // the results screen clears itself for the next player after this long
   var OUTBOX_KEY = 'mdl-balloon-outbox', DEVICE_KEY = 'mdl-balloon-device', GATE_KEY = 'mdl-gate';
 
   // ---------- Elements ----------
@@ -357,9 +358,9 @@
   function write(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
 
   // ---------- Game state ----------
-  var S;
+  var S, resetTimer = null;
   function makeSets() {
-    var order = shuffle(primaries), out = [];
+    var order = shuffle(S.reps), out = [];
     for (var i = 0; i < order.length; i += 3) out.push(order.slice(i, i + 3));
     var last = out[out.length - 1];
     if (last && last.length < 3) {
@@ -369,14 +370,15 @@
     return out;
   }
   function newGame() {
-    S = { sets: makeSets(), set: 0, pops: [], tally: {}, finals: [], champ: '', phase: 'sets',
-          startedAt: 0, setLog: [], finalLog: [], refineLog: [], second: '', fav: '', sent: false };
+    clearTimeout(resetTimer);
+    // each game opens every subject with a random one of its three versions (not always #1)
+    S = { reps: rows.map(function (r) { return r.cards[Math.floor(Math.random() * r.cards.length)]; }) };
+    S = { reps: S.reps, sets: makeSets(), set: 0, pops: [], tally: {}, finals: [], champ: '', phase: 'sets',
+          startedAt: 0, setLog: [], finalLog: [], refineLog: [], second: '', fav: '', order: [], sent: false };
   }
   function current() {
     if (S.phase === 'sets') return S.sets[S.set] || [];
-    if (S.phase === 'final') return S.finals.map(byName).filter(Boolean);
-    if (S.phase === 'refine2') return rowCards(S.second);
-    return rowCards(byName(S.champ).row);
+    return S.order;   // final and version rounds: shuffled when the round starts
   }
   function totalDarts() { return S.phase === 'sets' ? DARTS : S.phase === 'final' ? FINAL_DARTS : REFINE_DARTS; }
   function dartsLeft() { return S.phase === 'done' ? 0 : Math.max(0, totalDarts() - S.pops.length); }
@@ -430,24 +432,25 @@
       S.finalLog = log;
       var ranked = log.slice().sort(function (a, b) { return (b.darts - a.darts) || ((S.tally[b.card] || 0) - (S.tally[a.card] || 0)); });
       S.champ = ranked[0].card; S.second = byName(ranked[1].card).row;
-      S.phase = 'refine2'; S.pops = []; renderRound(); return;
+      S.phase = 'refine2'; S.order = shuffle(rowCards(S.second)); S.pops = []; renderRound(); return;
     }
     if (S.phase === 'refine2') {
       S.refineLog.push({ row: S.second, cards: log, winner: bestOf(log).card });
-      S.phase = 'refine1'; S.pops = []; renderRound(); return;
+      S.phase = 'refine1'; S.order = shuffle(rowCards(byName(S.champ).row)); S.pops = []; renderRound(); return;
     }
     if (S.phase === 'refine1') {
       var w = bestOf(log).card;
       S.refineLog.push({ row: byName(S.champ).row, cards: log, winner: w });
-      S.fav = w; S.phase = 'done'; S.pops = []; renderRound(); submit(); return;
+      S.fav = w; S.phase = 'done'; S.pops = []; renderRound(); submit();
+      resetTimer = setTimeout(reset, RESULTS_RESET_SECONDS * 1000); return;
     }
     S.pops.forEach(function (k) { var n = k.split('|')[0]; S.tally[n] = (S.tally[n] || 0) + 1; });
     S.setLog.push(log);
     S.pops = [];
     if (S.set + 1 >= S.sets.length) {
       var finals = Object.keys(S.tally).sort(function (a, b) { return S.tally[b] - S.tally[a]; }).slice(0, 3);
-      shuffle(primaries).forEach(function (c) { if (finals.length < 3 && finals.indexOf(c.name) < 0) finals.push(c.name); });
-      S.finals = finals; S.phase = 'final';
+      shuffle(S.reps).forEach(function (c) { if (finals.length < 3 && finals.indexOf(c.name) < 0) finals.push(c.name); });
+      S.finals = finals; S.phase = 'final'; S.order = shuffle(finals.map(byName));
     } else {
       S.set += 1;
     }
