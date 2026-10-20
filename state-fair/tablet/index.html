@@ -129,12 +129,12 @@
   .design-name { display: block; font: 700 20px/1.3 var(--sans); }
 
   /* Single-choice answers (radio) */
-  .choice-list { padding: 18px 48px 0; display: flex; flex-direction: column; gap: 12px; max-width: 808px; }
-  .choice { display: flex; align-items: center; gap: 14px; min-height: 68px; padding: 18px 22px; border-radius: 12px; border: 2px solid var(--line); background: var(--white); font: 700 22px/1.3 var(--sans); }
-  .choice .dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); background: var(--white); flex: none; display: grid; place-items: center; }
+  .choice-list { padding: 12px 48px 0; display: flex; flex-direction: column; gap: 8px; max-width: 808px; }
+  .choice { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 10px 18px; border-radius: 12px; border: 2px solid var(--line); background: var(--white); font: 700 19px/1.25 var(--sans); }
+  .choice .dot { width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--line); background: var(--white); flex: none; display: grid; place-items: center; }
   .choice:has(input:checked) { background: var(--navy); border-color: var(--navy); color: var(--white); }
   .choice:has(input:checked) .dot { border-color: var(--white); }
-  .choice:has(input:checked) .dot::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--navy); }
+  .choice:has(input:checked) .dot::after { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--navy); }
 
   /* Pick-any answers (checkbox) */
   .chip-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
@@ -200,7 +200,6 @@
           <label class="opt card"><input type="checkbox" name="picks" value="First in Flight · Sunburst"><span class="art"><img src="cards/flight-1.webp" alt="First in Flight"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
           <label class="opt card"><input type="checkbox" name="picks" value="Bluegrass · Banjo"><span class="art"><img src="cards/bluegrass-3.webp" alt="Bluegrass"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
           <label class="opt card"><input type="checkbox" name="picks" value="Sweet Potatoes · Truck bed"><span class="art"><img src="cards/sweetpotato-1.webp" alt="Sweet Potatoes"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
-<label class="opt card"><input type="checkbox" name="picks" value="Carolina Barbecue · Bandana pig"><span class="art"><img src="cards/bbq-1.webp" alt="Carolina Barbecue"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
         </div>
       </fieldset>
 
@@ -242,7 +241,7 @@
         <div class="design-list" data-variations-for="Agriculture · Sunny farm" hidden>
           <label class="opt design"><input type="radio" name="design" value="Agriculture · Sunny farm"><span class="art"><img src="cards/agriculture-1.webp" alt="Agriculture, Sunny farm"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Sunny farm</span></label>
           <label class="opt design"><input type="radio" name="design" value="Agriculture · Pig &amp; bandana"><span class="art"><img src="cards/agriculture-2.webp" alt="Agriculture, Pig &amp; bandana"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Pig &amp; bandana</span></label>
-          <label class="opt design"><input type="radio" name="design" value="Agriculture · Vintage print"><span class="art"><img src="cards/agriculture-vintage.webp" alt="Agriculture, Vintage print"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Vintage print</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Agriculture · Bandana pig"><span class="art"><img src="cards/bbq-1.webp" alt="Agriculture, Bandana pig"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Bandana pig</span></label>
         </div>
         <div class="design-list" data-variations-for="Barn Quilt · Watercolor autumn" hidden>
           <label class="opt design"><input type="radio" name="design" value="Barn Quilt · Watercolor autumn"><span class="art"><img src="cards/barnquilt-1.webp" alt="Barn Quilt, Watercolor autumn"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Watercolor autumn</span></label>
@@ -278,11 +277,6 @@
           <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Truck bed"><span class="art"><img src="cards/sweetpotato-1.webp" alt="Sweet Potatoes, Truck bed"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Truck bed</span></label>
           <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Close-up"><span class="art"><img src="cards/sweetpotato-3.webp" alt="Sweet Potatoes, Close-up"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Close-up</span></label>
           <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Vintage print"><span class="art"><img src="cards/sweetpotato-vintage.webp" alt="Sweet Potatoes, Vintage print"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Vintage print</span></label>
-        </div>
-        <div class="design-list" data-variations-for="Carolina Barbecue · Bandana pig" hidden>
-          <label class="opt design"><input type="radio" name="design" value="Carolina Barbecue · Bandana pig"><span class="art"><img src="cards/bbq-1.webp" alt="Carolina Barbecue, Bandana pig"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Bandana pig</span></label>
-          <label class="opt design"><input type="radio" name="design" value="Carolina Barbecue · Smoked with care"><span class="art"><img src="cards/bbq-2.webp" alt="Carolina Barbecue, Smoked with care"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Smoked with care</span></label>
-          <label class="opt design"><input type="radio" name="design" value="Carolina Barbecue · Stencil"><span class="art"><img src="cards/bbq-3.webp" alt="Carolina Barbecue, Stencil"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Stencil</span></label>
         </div>
       </fieldset>
 
