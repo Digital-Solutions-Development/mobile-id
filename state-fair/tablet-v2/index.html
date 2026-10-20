@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Help us design the NC Mobile ID – NC DMV</title>
+<meta name="description" content="Pick the card art that will launch with the NC Wallet app and share your thoughts on mobile ID.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,900&family=Fira+Sans:wght@500;600;700;800&display=swap">
+<style>
+  /* ---------- Colors (all text pairs meet WCAG AAA 7:1) ---------- */
+  :root {
+    --navy: #232B5F;      /* main text, buttons, selected options */
+    --ink-2: #3E4470;     /* secondary text */
+    --cream: #F3F1EC;     /* page background */
+    --yellow: #F5C54E;    /* thank-you background */
+    --red: #8E2A1F;       /* "You said…" label */
+    --line: #7A7E99;      /* borders on options and text boxes */
+    --off: #C9C6BC;       /* unfilled progress bars */
+    --white: #FFFFFF;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --sans: 'Fira Sans', system-ui, sans-serif;
+  }
+
+  /* ---------- Base ---------- */
+  * { box-sizing: border-box; }
+  html { scroll-padding-bottom: 120px; -webkit-text-size-adjust: 100%; }
+  body { margin: 0; touch-action: manipulation; background: var(--cream); color: var(--navy); font-family: var(--sans); -webkit-tap-highlight-color: transparent; }
+  a { color: var(--navy); }
+  a:hover { color: var(--red); }
+  img { display: block; max-width: 100%; }
+  h1, h2, p, fieldset, legend { margin: 0; padding: 0; }
+  fieldset { border: 0; min-width: 0; }
+  ::placeholder { color: #4A5079; opacity: 1; }
+  :focus-visible { outline: 3px solid var(--navy); outline-offset: 3px; }
+  [tabindex="-1"]:focus { outline: none; }
+  .visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+
+  /* ---------- Layout ---------- */
+  main { max-width: none; margin: 0 auto; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+  .top-bar { height: 12px; background: var(--navy); flex: none; }
+  #survey { flex: 1; display: flex; flex-direction: column; }
+  .screen { display: flex; flex-direction: column; flex: 1; }
+  .screen[hidden] { display: none; }
+  .block { padding: 0 48px; }
+  .spacer { flex: 1; min-height: 24px; }
+
+  /* ---------- Type ---------- */
+  .title-xl { font: 900 72px/1.04 var(--serif); letter-spacing: -.01em; text-wrap: balance; }
+  .title { font: 900 46px/1.1 var(--serif); text-wrap: balance; }
+  .lead { font: 700 26px/1.45 var(--sans); text-wrap: pretty; }
+  .hint { font: 500 21px/1.5 var(--sans); color: var(--ink-2); }
+  .eyebrow { font: 700 16px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--red); }
+  .field-label { display: block; font: 700 22px/1.4 var(--sans); }
+  .optional { font-weight: 500; color: var(--ink-2); }
+
+  /* ---------- Buttons ---------- */
+  .btn { appearance: none; border: 2px solid var(--navy); background: var(--navy); color: var(--white); font: 700 22px/1.2 var(--sans); padding: 20px 40px; min-height: 68px; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+  .btn[aria-disabled="true"] { background: #E4E1D9; color: var(--ink-2); border-color: var(--line); }
+  .btn-link { appearance: none; border: 0; background: none; color: var(--navy); font: 600 20px/1.2 var(--sans); padding: 14px 6px; min-height: 56px; min-width: 56px; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-link.underline { text-decoration: underline; padding-left: 0; }
+
+  /* ---------- Intro / thank-you ---------- */
+  .hero { background: var(--navy); }
+  .hero img { width: 100%; aspect-ratio: 1516 / 908; max-height: 46vh; object-fit: cover; }
+  .logo { background: var(--white); padding: 6px; border-radius: 6px; flex: none; }
+  .logo img { width: 132px; }
+  .bottom-row { padding: 36px 48px; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+  .thanks { background: var(--yellow); }
+  .top-pick img { width: 100%; max-width: 560px; aspect-ratio: 1.586; object-fit: cover; border-radius: 14px; box-shadow: 0 10px 24px rgba(35,43,95,.3); transform: rotate(-2deg); margin-top: 16px; }
+  .small-caps { font: 700 18px/1.4 var(--sans); letter-spacing: .1em; text-transform: uppercase; }
+
+  /* ---------- Step header ---------- */
+  .step-header { padding: 24px 48px 0; display: flex; flex-direction: column; gap: 14px; }
+  .step-header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .step-count { font: 600 19px/1.3 var(--sans); color: var(--ink-2); }
+  .progress { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .progress span { height: 8px; border-radius: 4px; background: var(--off); }
+  .progress span.done { background: var(--navy); }
+  legend { width: 100%; }
+  .question-head { display: block; padding: 30px 48px 10px; }
+  .question-head > * { display: block; }
+  .question-head > [hidden] { display: none; }
+  .question-head > * + * { margin-top: 10px; }
+
+  /* ---------- Step footer (sticky) ---------- */
+  .step-footer { position: sticky; bottom: 0; background: var(--cream); border-top: 1px solid var(--line); padding: 18px 48px calc(18px + env(safe-area-inset-bottom)); display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .status { font: 600 19px/1.4 var(--sans); color: var(--ink-2); min-width: 0; }
+
+  /* ---------- Option shared: a real input laid over a styled label ---------- */
+  .opt { position: relative; cursor: pointer; -webkit-user-select: none; user-select: none; }
+  .opt > input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; z-index: 1; }
+  .opt:has(input:focus-visible) { outline: 3px solid var(--navy); outline-offset: 3px; }
+
+  /* Card art checkboxes: sized by script (fitCards) to fill the space between the heading and the footer */
+  .card-grid { padding: 16px 48px 8px; display: flex; flex-wrap: wrap; justify-content: center; align-content: center; gap: 20px; }
+  .card { border-radius: 12px; flex: 0 0 var(--cw, calc((100% - 40px) / 3)); min-width: 0; }
+  /* Step 1 only: compact header, heading and footer so the art gets the room */
+  [data-screen="cards"] .step-header { flex-direction: row; align-items: center; gap: 20px; padding: 10px 32px 0; }
+  [data-screen="cards"] .step-header-row { display: contents; }
+  [data-screen="cards"] .progress { order: 1; flex: 1; }
+  [data-screen="cards"] .step-count { order: 2; }
+  [data-screen="cards"] .question-head { padding: 10px 32px 14px; display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 20px; row-gap: 2px; }
+  [data-screen="cards"] .question-head > * + * { margin-top: 0; }
+  [data-screen="cards"] .title { font-size: 36px; }
+  [data-screen="cards"] .hint { font-size: 19px; }
+  [data-screen="cards"] > fieldset { flex: 1; display: flex; flex-direction: column; }
+  [data-screen="cards"] .card-grid { padding: 12px 12px 4px; gap: 16px; flex: 1; }
+  [data-screen="cards"] .spacer { min-height: 0; }
+  [data-screen="cards"] .step-footer { padding: 10px 32px calc(10px + env(safe-area-inset-bottom)); }
+  [data-screen="cards"] .step-footer .btn { min-height: 60px; padding: 14px 34px; }
+  .card .art { position: relative; aspect-ratio: 1.586; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(35,43,95,.18); }
+  .card .art img { width: 100%; height: 100%; object-fit: cover; }
+  .card:has(input:checked) .art { outline: 4px solid var(--navy); outline-offset: 2px; }
+  .card .rank { display: none; position: absolute; top: 9px; left: 9px; min-width: 42px; min-height: 42px; padding: 0 12px; border-radius: 999px; background: var(--navy); color: var(--white); border: 2px solid var(--white); font: 800 21px/38px var(--sans); text-align: center; }
+  .card:has(input:checked) .rank { display: block; }
+
+
+  /* Step 2: three designs side by side */
+  .design-list { padding: 16px 48px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+  .design-list[hidden] { display: none; }
+  .design { border-radius: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .design .art { position: relative; display: block; aspect-ratio: 1.586; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 6px rgba(35,43,95,.18); }
+  .design .art img { width: 100%; height: 100%; object-fit: cover; }
+  .design .tick { display: none; position: absolute; top: 10px; right: 10px; width: 42px; height: 42px; border-radius: 50%; background: var(--navy); color: var(--white); border: 2px solid var(--white); font: 800 20px/38px var(--sans); text-align: center; }
+  .design:has(input:checked) .art { outline: 4px solid var(--navy); outline-offset: 2px; }
+  .design:has(input:checked) .tick { display: block; }
+  .design-name { display: block; font: 700 20px/1.3 var(--sans); }
+
+  /* Single-choice answers (radio) */
+  .choice-list { padding: 18px 48px 0; display: flex; flex-direction: column; gap: 12px; max-width: 808px; }
+  .choice { display: flex; align-items: center; gap: 14px; min-height: 68px; padding: 18px 22px; border-radius: 12px; border: 2px solid var(--line); background: var(--white); font: 700 22px/1.3 var(--sans); }
+  .choice .dot { width: 30px; height: 30px; border-radius: 50%; border: 2px solid var(--line); background: var(--white); flex: none; display: grid; place-items: center; }
+  .choice:has(input:checked) { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .choice:has(input:checked) .dot { border-color: var(--white); }
+  .choice:has(input:checked) .dot::after { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--navy); }
+
+  /* Pick-any answers (checkbox) */
+  .chip-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+  @media (orientation: landscape) { .chip-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  .chip { display: flex; align-items: center; gap: 9px; min-height: 66px; padding: 12px 16px; border-radius: 12px; border: 2px solid var(--line); background: var(--white); font: 600 19px/1.3 var(--sans); }
+  .chip .box { width: 24px; height: 24px; border-radius: 5px; border: 2px solid currentColor; flex: none; display: grid; place-items: center; font: 800 16px/1 var(--sans); }
+  .chip:has(input:checked) { background: var(--navy); border-color: var(--navy); color: var(--white); }
+  .chip:has(input:checked) .box::after { content: "\2713"; }
+
+  /* Text boxes */
+  textarea { width: 100%; font: 400 20px/1.5 var(--sans); color: var(--navy); padding: 16px; border: 2px solid var(--line); border-radius: 10px; background: var(--white); resize: vertical; }
+  textarea:focus-visible { outline-offset: 0; }
+  .text-field { padding: 44px 48px 8px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* Bot trap: hidden from people and assistive tech */
+  .trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+</style>
+</head>
+<body>
+<main>
+  <div class="top-bar" aria-hidden="true"></div>
+
+  <form id="survey" novalidate>
+
+    <!-- =========================== INTRO =========================== -->
+    <section class="screen" data-screen="intro" data-title="Help us design the NC Mobile ID">
+      <div class="hero"><img src="images/hero-collage.webp" alt=""></div>
+      <div class="block" style="padding-top:28px;display:flex;flex-direction:column;gap:16px;flex:1">
+        <h1 class="title-xl" tabindex="-1">Help us design the NC Mobile ID</h1>
+        <p class="lead">Select card art that will launch with the NC Wallet app,<br>and share your thoughts on mobile ID!</p>
+      </div>
+      <div class="bottom-row">
+        <button type="button" class="btn" data-go="cards">Get started</button>
+        <div class="logo"><img src="images/dmv-logo-blue.png" alt="North Carolina Division of Motor Vehicles"></div>
+      </div>
+    </section>
+
+    <!-- ======================= STEP 1: CARD ART ======================= -->
+    <!-- data-max-picks sets how many cards people can choose -->
+    <section class="screen" data-screen="cards" data-step="1" data-title="Step 1 of 4: Pick card art" data-max-picks="3" hidden>
+      <div class="step-header">
+        <div class="step-header-row">
+          <button type="button" class="btn-link" data-go="intro"><span aria-hidden="true">←</span>Back</button>
+          <p class="step-count">Step 1 of 4</p>
+        </div>
+        <div class="progress" aria-hidden="true"><span class="done"></span><span></span><span></span><span></span></div>
+      </div>
+
+      <fieldset aria-describedby="cards-hint">
+        <legend class="question-head">
+          <h1 class="title" tabindex="-1">Pick your favorite card art</h1>
+          <span class="hint" id="cards-hint" style="display:block">Tap up to 3, in order of preference. Tap again to remove.</span>
+        </legend>
+        <!-- Each card is a subject's #1 design. value="" is "Subject · Design" and must match BALLOON_ROWS in Code.gs. -->
+        <div class="card-grid">
+          <label class="opt card"><input type="checkbox" name="picks" value="Blue Ridge Mountains · Gold poster"><span class="art"><img src="cards/blueridge-1.webp" alt="Blue Ridge Mountains"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Linn Cove Viaduct · Red sun poster"><span class="art"><img src="cards/linncove-1.webp" alt="Linn Cove Viaduct"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Agriculture · Sunny farm"><span class="art"><img src="cards/agriculture-1.webp" alt="Agriculture"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Barn Quilt · Watercolor autumn"><span class="art"><img src="cards/barnquilt-1.webp" alt="Barn Quilt"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Coastal · Hatteras blue"><span class="art"><img src="cards/coastal-hatteras-blue.webp" alt="Coastal"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Cape Hatteras · Bold blue"><span class="art"><img src="cards/hatteras-1.webp" alt="Cape Hatteras"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Venus Fly Trap · Neon on black"><span class="art"><img src="cards/flytrap-4.webp" alt="Venus Fly Trap"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="First in Flight · Sunburst"><span class="art"><img src="cards/flight-1.webp" alt="First in Flight"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Bluegrass · Banjo"><span class="art"><img src="cards/bluegrass-3.webp" alt="Bluegrass"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+          <label class="opt card"><input type="checkbox" name="picks" value="Sweet Potatoes · Truck bed"><span class="art"><img src="cards/sweetpotato-1.webp" alt="Sweet Potatoes"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+        </div>
+      </fieldset>
+
+      <div class="spacer"></div>
+      <div class="step-footer">
+        <p class="status" role="status" aria-live="polite" data-empty="Pick at least one" data-error="Pick at least one card to continue." data-limit="You can pick up to 3. Tap a pick to remove it first."></p>
+        <button type="button" class="btn" data-next="design">Next<span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <!-- ===================== STEP 2: BEST VERSION ===================== -->
+    <!-- One group per subject. Only the group for the person's 1st pick is shown.
+         data-variations-for must match that subject's value in step 1; value="" must match BALLOON_ROWS in Code.gs. -->
+    <section class="screen" data-screen="design" data-step="2" data-title="Step 2 of 4: Pick the best version" hidden>
+      <div class="step-header">
+        <div class="step-header-row">
+          <button type="button" class="btn-link" data-go="cards"><span aria-hidden="true">←</span>Back</button>
+          <p class="step-count">Step 2 of 4</p>
+        </div>
+        <div class="progress" aria-hidden="true"><span class="done"></span><span class="done"></span><span></span><span></span></div>
+      </div>
+
+      <fieldset aria-describedby="design-hint">
+        <legend class="question-head">
+          <span class="eyebrow">Your 1st pick: <span data-top-subject></span></span>
+          <h1 class="title" tabindex="-1">Which version do you like best?</h1>
+          <span class="hint" id="design-hint" style="display:block">Same subject, three styles. Pick one.</span>
+        </legend>
+        <div class="design-list" data-variations-for="Blue Ridge Mountains · Gold poster" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Blue Ridge Mountains · Gold poster"><span class="art"><img src="cards/blueridge-1.webp" alt="Blue Ridge Mountains, Gold poster"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Gold poster</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Blue Ridge Mountains · Teal &amp; coral"><span class="art"><img src="cards/blueridge-2.webp" alt="Blue Ridge Mountains, Teal &amp; coral"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Teal &amp; coral</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Blue Ridge Mountains · Hot sunset"><span class="art"><img src="cards/blueridge-hot-sunset.webp" alt="Blue Ridge Mountains, Hot sunset"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Hot sunset</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Linn Cove Viaduct · Red sun poster" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Linn Cove Viaduct · Red sun poster"><span class="art"><img src="cards/linncove-1.webp" alt="Linn Cove Viaduct, Red sun poster"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Red sun poster</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Linn Cove Viaduct · Teal &amp; coral"><span class="art"><img src="cards/linncove-teal.webp" alt="Linn Cove Viaduct, Teal &amp; coral"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Teal &amp; coral</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Linn Cove Viaduct · Clear autumn day"><span class="art"><img src="cards/linncove-autumn-day.webp" alt="Linn Cove Viaduct, Clear autumn day"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Clear autumn day</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Agriculture · Sunny farm" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Agriculture · Sunny farm"><span class="art"><img src="cards/agriculture-1.webp" alt="Agriculture, Sunny farm"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Sunny farm</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Agriculture · Pig &amp; bandana"><span class="art"><img src="cards/agriculture-2.webp" alt="Agriculture, Pig &amp; bandana"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Pig &amp; bandana</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Agriculture · Vintage print"><span class="art"><img src="cards/agriculture-vintage.webp" alt="Agriculture, Vintage print"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Vintage print</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Barn Quilt · Watercolor autumn" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Barn Quilt · Watercolor autumn"><span class="art"><img src="cards/barnquilt-1.webp" alt="Barn Quilt, Watercolor autumn"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Watercolor autumn</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Barn Quilt · Red sky"><span class="art"><img src="cards/barnquilt-2.webp" alt="Barn Quilt, Red sky"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Red sky</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Barn Quilt · Navy &amp; gold"><span class="art"><img src="cards/barnquilt-navy-gold.webp" alt="Barn Quilt, Navy &amp; gold"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Navy &amp; gold</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Coastal · Hatteras blue" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Coastal · Hatteras blue"><span class="art"><img src="cards/coastal-hatteras-blue.webp" alt="Coastal, Hatteras blue"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Hatteras blue</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Coastal · Watercolor kites"><span class="art"><img src="cards/coastal-1.webp" alt="Coastal, Watercolor kites"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Watercolor kites</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Coastal · Red sky"><span class="art"><img src="cards/coastal-2.webp" alt="Coastal, Red sky"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Red sky</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Cape Hatteras · Bold blue" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Cape Hatteras · Bold blue"><span class="art"><img src="cards/hatteras-1.webp" alt="Cape Hatteras, Bold blue"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Bold blue</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Cape Hatteras · Faded print"><span class="art"><img src="cards/hatteras-2.webp" alt="Cape Hatteras, Faded print"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Faded print</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Cape Hatteras · Teal poster"><span class="art"><img src="cards/hatteras-3.webp" alt="Cape Hatteras, Teal poster"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Teal poster</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Venus Fly Trap · Neon on black" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Venus Fly Trap · Neon on black"><span class="art"><img src="cards/flytrap-4.webp" alt="Venus Fly Trap, Neon on black"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Neon on black</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Venus Fly Trap · Watercolor"><span class="art"><img src="cards/flytrap-1.webp" alt="Venus Fly Trap, Watercolor"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Watercolor</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Venus Fly Trap · Cosmic"><span class="art"><img src="cards/flytrap-2.webp" alt="Venus Fly Trap, Cosmic"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Cosmic</span></label>
+        </div>
+        <div class="design-list" data-variations-for="First in Flight · Sunburst" hidden>
+          <label class="opt design"><input type="radio" name="design" value="First in Flight · Sunburst"><span class="art"><img src="cards/flight-1.webp" alt="First in Flight, Sunburst"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Sunburst</span></label>
+          <label class="opt design"><input type="radio" name="design" value="First in Flight · Clean sky"><span class="art"><img src="cards/flight-4.webp" alt="First in Flight, Clean sky"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Clean sky</span></label>
+          <label class="opt design"><input type="radio" name="design" value="First in Flight · Sunset rays"><span class="art"><img src="cards/flight-5.webp" alt="First in Flight, Sunset rays"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Sunset rays</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Bluegrass · Banjo" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Bluegrass · Banjo"><span class="art"><img src="cards/bluegrass-3.webp" alt="Bluegrass, Banjo"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Banjo</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Bluegrass · Porch band"><span class="art"><img src="cards/bluegrass-1.webp" alt="Bluegrass, Porch band"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Porch band</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Bluegrass · Fiddle on the porch"><span class="art"><img src="cards/bluegrass-4.webp" alt="Bluegrass, Fiddle on the porch"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Fiddle on the porch</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Sweet Potatoes · Truck bed" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Truck bed"><span class="art"><img src="cards/sweetpotato-1.webp" alt="Sweet Potatoes, Truck bed"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Truck bed</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Close-up"><span class="art"><img src="cards/sweetpotato-3.webp" alt="Sweet Potatoes, Close-up"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Close-up</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Vintage print"><span class="art"><img src="cards/sweetpotato-vintage.webp" alt="Sweet Potatoes, Vintage print"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Vintage print</span></label>
+        </div>
+      </fieldset>
+
+      <div class="text-field" style="padding-top:44px">
+        <label class="field-label" for="designNote">Anything you'd change about these designs? <span class="optional">(optional)</span></label>
+        <textarea id="designNote" name="designNote" rows="3" maxlength="1000"></textarea>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="step-footer">
+        <p class="status" role="status" aria-live="polite" data-empty="Choose a version" data-error="Choose a version to continue."></p>
+        <button type="button" class="btn" data-next="interest">Next<span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <!-- ===================== STEP 3: MOBILE ID ===================== -->
+    <section class="screen" data-screen="interest" data-step="2" data-title="Step 3 of 4: Would you use a mobile ID?" hidden>
+      <div class="step-header">
+        <div class="step-header-row">
+          <button type="button" class="btn-link" data-go="design"><span aria-hidden="true">←</span>Back</button>
+          <p class="step-count">Step 3 of 4</p>
+        </div>
+        <div class="progress" aria-hidden="true"><span class="done"></span><span class="done"></span><span class="done"></span><span></span></div>
+      </div>
+
+      <!-- data-branch picks which follow-up question appears in step 3: yes, maybe, or no -->
+      <fieldset aria-describedby="mid-desc">
+        <legend class="question-head">
+          <h1 class="title" tabindex="-1">Would you use a mobile ID? <span class="optional" style="font:500 22px/1.2 var(--sans)">(optional)</span></h1>
+          <span class="hint" id="mid-desc" style="display:block">A secure digital version of your NC driver's license or ID, stored in the NC Wallet app on your phone.</span>
+        </legend>
+        <div class="choice-list">
+          <label class="opt choice"><input type="radio" name="interest" value="Yes, definitely" data-branch="yes" data-said="yes"><span class="dot" aria-hidden="true"></span>Yes, definitely</label>
+          <label class="opt choice"><input type="radio" name="interest" value="Probably" data-branch="yes" data-said="probably"><span class="dot" aria-hidden="true"></span>Probably</label>
+          <label class="opt choice"><input type="radio" name="interest" value="Not sure yet" data-branch="maybe" data-said="not sure yet"><span class="dot" aria-hidden="true"></span>Not sure yet</label>
+          <label class="opt choice"><input type="radio" name="interest" value="Probably not" data-branch="no" data-said="probably not"><span class="dot" aria-hidden="true"></span>Probably not</label>
+          <label class="opt choice"><input type="radio" name="interest" value="No" data-branch="no" data-said="no"><span class="dot" aria-hidden="true"></span>No</label>
+        </div>
+      </fieldset>
+
+      <fieldset class="block" style="margin-top:44px">
+        <legend class="field-label" style="padding-bottom:10px">Where would you want to use it? <span class="optional">(pick any/all)</span></legend>
+        <div class="chip-grid">
+          <label class="opt chip"><input type="checkbox" name="uses" value="Airport security (TSA)"><span class="box" aria-hidden="true"></span>Airport security (TSA)</label>
+          <label class="opt chip"><input type="checkbox" name="uses" value="Traffic stops"><span class="box" aria-hidden="true"></span>Traffic stops</label>
+          <label class="opt chip"><input type="checkbox" name="uses" value="Buying alcohol or tobacco"><span class="box" aria-hidden="true"></span>Buying alcohol or tobacco</label>
+          <label class="opt chip"><input type="checkbox" name="uses" value="Getting into bars"><span class="box" aria-hidden="true"></span>Getting into bars</label>
+          <label class="opt chip"><input type="checkbox" name="uses" value="Picking up prescriptions"><span class="box" aria-hidden="true"></span>Picking up prescriptions</label>
+          <label class="opt chip"><input type="checkbox" name="uses" value="Banks &amp; notaries"><span class="box" aria-hidden="true"></span>Banks &amp; notaries</label>
+          <label class="opt chip"><input type="checkbox" name="uses" value="Hotels &amp; car rentals"><span class="box" aria-hidden="true"></span>Hotels &amp; car rentals</label>
+          <label class="opt chip"><input type="checkbox" name="uses" value="Online ID checks"><span class="box" aria-hidden="true"></span>Online ID checks</label>
+        </div>
+      </fieldset>
+
+      <div class="spacer"></div>
+      <div class="step-footer">
+        <p class="status" role="status" aria-live="polite" data-empty="Everything here is optional"></p>
+        <button type="button" class="btn" data-next="followup">Next<span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <!-- ===================== STEP 4: FOLLOW-UP ===================== -->
+    <!-- Only the group matching the step 2 answer is shown. -->
+    <section class="screen" data-screen="followup" data-step="3" data-title="Step 4 of 4: Questions and concerns" hidden>
+      <div class="trap" aria-hidden="true"><label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+      <div class="step-header">
+        <div class="step-header-row">
+          <button type="button" class="btn-link" data-go="interest"><span aria-hidden="true">←</span>Back</button>
+          <p class="step-count">Step 4 of 4</p>
+        </div>
+        <div class="progress" aria-hidden="true"><span class="done"></span><span class="done"></span><span class="done"></span><span class="done"></span></div>
+      </div>
+
+      <fieldset data-branch-group="yes" hidden>
+        <legend class="question-head">
+          <span class="eyebrow">You said <span data-said-text></span></span>
+          <h1 class="title" tabindex="-1">What would you want to know before you start?</h1>
+          <span class="hint" style="display:block">Pick any that apply.</span>
+        </legend>
+        <div class="chip-grid block" style="padding-top:10px">
+          <label class="opt chip"><input type="checkbox" name="concerns" value="How to set it up"><span class="box" aria-hidden="true"></span>How to set it up</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Where it’s accepted"><span class="box" aria-hidden="true"></span>Where it’s accepted</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="How my data is protected"><span class="box" aria-hidden="true"></span>How my data is protected</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="What if I lose my phone"><span class="box" aria-hidden="true"></span>What if I lose my phone</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Whether it’s free"><span class="box" aria-hidden="true"></span>Whether it’s free</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Using it out of state"><span class="box" aria-hidden="true"></span>Using it out of state</label>
+        </div>
+      </fieldset>
+
+      <fieldset data-branch-group="maybe" hidden>
+        <legend class="question-head">
+          <span class="eyebrow">You said <span data-said-text></span></span>
+          <h1 class="title" tabindex="-1">What would help you decide?</h1>
+          <span class="hint" style="display:block">Pick any that apply.</span>
+        </legend>
+        <div class="chip-grid block" style="padding-top:10px">
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Knowing it’s secure"><span class="box" aria-hidden="true"></span>Knowing it’s secure</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Knowing where it’s accepted"><span class="box" aria-hidden="true"></span>Knowing where it’s accepted</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Keeping my plastic card too"><span class="box" aria-hidden="true"></span>Keeping my plastic card too</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Seeing how it works"><span class="box" aria-hidden="true"></span>Seeing how it works</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Knowing it’s free"><span class="box" aria-hidden="true"></span>Knowing it’s free</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Hearing from people who use it"><span class="box" aria-hidden="true"></span>Hearing from people who use it</label>
+        </div>
+      </fieldset>
+
+      <fieldset data-branch-group="no" hidden>
+        <legend class="question-head">
+          <span class="eyebrow">You said <span data-said-text></span></span>
+          <h1 class="title" tabindex="-1">What’s holding you back?</h1>
+          <span class="hint" style="display:block">Pick any that apply.</span>
+        </legend>
+        <div class="chip-grid block" style="padding-top:10px">
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Privacy of my data"><span class="box" aria-hidden="true"></span>Privacy of my data</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Not sure it’s secure"><span class="box" aria-hidden="true"></span>Not sure it’s secure</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Losing my phone or battery"><span class="box" aria-hidden="true"></span>Losing my phone or battery</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Handing my phone to someone"><span class="box" aria-hidden="true"></span>Handing my phone to someone</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="Not accepted enough places"><span class="box" aria-hidden="true"></span>Not accepted enough places</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="My plastic card works fine"><span class="box" aria-hidden="true"></span>My plastic card works fine</label>
+          <label class="opt chip"><input type="checkbox" name="concerns" value="No smartphone"><span class="box" aria-hidden="true"></span>No smartphone</label>
+        </div>
+      </fieldset>
+
+      <div class="text-field">
+        <label class="field-label" for="questions">Any other thoughts, comments, or concerns? <span class="optional">(optional)</span></label>
+        <textarea id="questions" name="questions" rows="4" maxlength="1000" placeholder="Let us know what you're thinking!"></textarea>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="step-footer">
+        <p class="status" role="status" aria-live="polite">Last step. Everything here is optional.</p>
+        <button type="submit" class="btn">Submit</button>
+      </div>
+    </section>
+
+    <!-- ========================= THANK YOU ========================= -->
+    <section class="screen thanks" data-screen="thanks" data-title="Thank you" hidden>
+      <div class="block" style="padding-top:40px;display:flex;flex-direction:column;gap:16px">
+        <h1 class="title-xl" tabindex="-1">Thank you!</h1>
+        <p class="lead">Your feedback helps shape the NC Mobile ID and how we roll it out!</p>
+      </div>
+      <figure class="block top-pick" style="margin:0;padding-top:28px" hidden>
+        <figcaption><h2 class="small-caps">Your top pick</h2></figcaption>
+        <img id="top-pick-img" alt="">
+      </figure>
+      <p class="block" style="padding-top:28px;font:700 18px/1.5 var(--sans)">Have more questions? Ask anyone on our team here in the tent.</p>
+      <div class="spacer"></div>
+      <div class="bottom-row">
+        <button type="button" class="btn" data-restart>Start over for the next person</button>
+        <div class="logo"><img src="images/dmv-logo-blue.png" alt="North Carolina Division of Motor Vehicles"></div>
+      </div>
+    </section>
+
+  </form>
+</main>
+
+<script>
+(function () {
+  // ---------- Settings ----------
+  var SHEET_URL = 'https://script.google.com/macros/s/AKfycbwvGXtYDzdJAM0dCPXz5zWIiuHFVIELJYgbDgFQSrKOMBsDzrMsPTXKeXa2ZqZoCMy0tg/exec';
+  var TOKEN = 'ncmid-fair-2026';  // must match TOKEN in Code.gs
+  var DRAFT_KEY = 'ncmid-ipad-draft-v1', OUTBOX_KEY = 'ncmid-ipad-outbox', DEVICE_KEY = 'ncmid-ipad-device';
+  var THANKS_RESET_SECONDS = 60;   // thank-you screen clears itself for the next person after this long
+  var IDLE_RESET_SECONDS = 120;    // a survey left untouched this long starts over (someone walked away)
+
+  var form = document.getElementById('survey');
+  var screens = form.querySelectorAll('[data-screen]');
+  var cardsScreen = form.querySelector('[data-screen="cards"]');
+  var MAX = parseInt(cardsScreen.dataset.maxPicks, 10) || 3;
+  var picks = [];       // card values in the order they were chosen
+  var startedAt = 0, current = 'intro', geo = null, thanksTimer = null, idleTimer = null;
+
+  // ---------- Storage helpers ----------
+  function read(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch (e) { return fallback; } }
+  function write(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
+  function checked(name) { return Array.prototype.map.call(form.querySelectorAll('input[name="' + name + '"]:checked:not(:disabled)'), function (i) { return i.value; }); }
+  function screenEl(name) { return form.querySelector('[data-screen="' + name + '"]'); }
+  function status(name) { return screenEl(name).querySelector('.status'); }
+
+  // ---------- Card grid: pick the column count that makes the cards biggest while all 10 fit on screen ----------
+  function fitCards() {
+    var grid = form.querySelector('.card-grid');
+    if (!grid || !grid.offsetParent) return;
+    var cs = getComputedStyle(grid), gap = parseFloat(cs.columnGap) || 20;
+    var W = grid.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    var footer = grid.closest('.screen').querySelector('.step-footer');
+    var top = grid.getBoundingClientRect().top + window.scrollY + parseFloat(cs.paddingTop);
+    var H = window.innerHeight - top - (footer ? footer.offsetHeight : 0) - parseFloat(cs.paddingBottom) - 12;
+    var n = grid.querySelectorAll('.card').length, best = 0;
+    for (var cols = 4; cols <= 4; cols++) {   // fixed at 4 columns (3 rows: 4 · 4 · 2)
+      var rows = Math.ceil(n / cols);
+      var w = Math.min((W - (cols - 1) * gap) / cols, ((H - (rows - 1) * gap) / rows) * 1.586);
+      if (w > best) best = w;
+    }
+    grid.style.setProperty('--cw', Math.max(150, Math.floor(best)) + 'px');
+  }
+  window.addEventListener('resize', fitCards);
+  window.addEventListener('orientationchange', function () { setTimeout(fitCards, 250); });
+
+  // ---------- Navigation ----------
+  function show(name, focus) {
+    current = name;
+    screens.forEach(function (s) { s.hidden = s.dataset.screen !== name; });
+    if (name === 'followup') showBranch();
+    if (name === 'design') showDesigns();
+    if (name === 'cards') requestAnimationFrame(fitCards);
+    if (name === 'thanks') { showTopPick(); thanksTimer = setTimeout(resetAll, THANKS_RESET_SECONDS * 1000); }
+    document.title = screenEl(name).dataset.title + ' – NC DMV';
+    window.scrollTo(0, 0);
+    updateStatus();
+    if (focus !== false) {
+      var h = Array.prototype.find.call(screenEl(name).querySelectorAll('h1'), function (el) { return el.offsetParent !== null; });
+      if (h) h.focus();
+    }
+    saveDraft();
+    poke();
+  }
+
+  // ---------- Shared iPad: start over for the next person ----------
+  // Each new person sees the step 1 cards in a fresh random order (picks are saved by name, so order doesn't matter to the Sheet)
+  function shuffleKids(box, sel) {
+    var kids = Array.prototype.slice.call(box.querySelectorAll(sel));
+    for (var i = kids.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = kids[i]; kids[i] = kids[j]; kids[j] = t; }
+    kids.forEach(function (k) { box.appendChild(k); });
+  }
+  // step 1 cards and each subject's step 2 versions get a fresh random order per person
+  function shuffleCards() {
+    var grid = form.querySelector('.card-grid'); if (grid) shuffleKids(grid, '.card');
+    form.querySelectorAll('.design-list').forEach(function (g) { shuffleKids(g, '.design'); });
+  }
+  function resetAll() {
+    clearTimeout(thanksTimer); clearTimeout(idleTimer);
+    shuffleCards();
+    form.reset(); picks = []; startedAt = 0; renderRanks();
+    show('intro', false);
+  }
+  function poke() {
+    clearTimeout(idleTimer);
+    if (current !== 'intro' && current !== 'thanks') idleTimer = setTimeout(resetAll, IDLE_RESET_SECONDS * 1000);
+  }
+  ['pointerdown', 'keydown', 'input'].forEach(function (ev) { document.addEventListener(ev, poke, true); });
+
+  function selectedInterest() { return form.querySelector('input[name="interest"]:checked'); }
+
+  function showBranch() {
+    var r = selectedInterest(), branch = r ? r.dataset.branch : 'maybe';   // skipped step 3 → neutral follow-up
+    form.querySelectorAll('[data-branch-group]').forEach(function (g) {
+      var on = g.dataset.branchGroup === branch;
+      g.hidden = !on;
+      g.disabled = !on;  // hidden groups are skipped on submit
+    });
+    form.querySelectorAll('[data-said-text]').forEach(function (s) { s.textContent = r ? r.dataset.said : ''; s.parentNode.hidden = !r; });
+  }
+
+  function selectedDesign() { return form.querySelector('input[name="design"]:checked:not(:disabled)'); }
+
+  function showDesigns() {
+    form.querySelectorAll('[data-variations-for]').forEach(function (g) {
+      var on = g.dataset.variationsFor === picks[0];
+      g.hidden = !on;
+      g.querySelectorAll('input').forEach(function (i) { i.disabled = !on; if (!on) i.checked = false; });
+    });
+    var top = picks[0] ? picks[0].split(' · ')[0] : '';
+    form.querySelectorAll('[data-top-subject]').forEach(function (s) { s.textContent = top; });
+  }
+
+  function canContinue(name) {
+    if (name === 'cards') return picks.length > 0;
+    if (name === 'design') return !!selectedDesign();
+    return true;
+  }
+
+  function updateStatus(message) {
+    var s = form.querySelector('[data-screen="' + current + '"] .status');
+    var next = form.querySelector('[data-screen="' + current + '"] [data-next]');
+    if (next) next.setAttribute('aria-disabled', canContinue(current) ? 'false' : 'true');
+    if (!s || current === 'followup') return;
+    if (message) { s.textContent = message; return; }
+    if (current === 'cards') s.textContent = picks.length ? picks.length + ' of ' + MAX + ' picked' : s.dataset.empty;
+    if (current === 'interest') s.textContent = selectedInterest() ? '' : s.dataset.empty;
+    if (current === 'design') s.textContent = selectedDesign() ? '' : s.dataset.empty;
+  }
+
+  // ---------- Card ranking ----------
+  var ORD = ['1st', '2nd', '3rd', '4th', '5th'];
+  function renderRanks() {
+    cardsScreen.querySelectorAll('.card').forEach(function (label) {
+      var input = label.querySelector('input'), i = picks.indexOf(input.value);
+      input.checked = i >= 0;
+      label.querySelector('.rank').textContent = i >= 0 ? i + 1 : '';
+      label.querySelector('.rank-text').textContent = i >= 0 && MAX > 1 ? ', your ' + ORD[i] + ' pick' : '';
+    });
+  }
+
+  form.addEventListener('change', function (e) {
+    var t = e.target;
+    if (t.name === 'picks') {
+      if (t.checked) {
+        if (picks.length >= MAX) { t.checked = false; updateStatus(status('cards').dataset.limit); return; }
+        picks.push(t.value);
+      } else {
+        picks = picks.filter(function (v) { return v !== t.value; });
+      }
+      renderRanks();
+    }
+    if (t.name === 'interest') {
+      // switching to a different follow-up group clears picks from the old one
+      form.querySelectorAll('input[name="concerns"]').forEach(function (c) {
+        if (c.closest('[data-branch-group]').dataset.branchGroup !== t.dataset.branch) c.checked = false;
+      });
+    }
+    updateStatus();
+    saveDraft();
+  });
+  form.addEventListener('input', function (e) { if (e.target.tagName === 'TEXTAREA') saveDraft(); });
+
+  form.addEventListener('click', function (e) {
+    var go = e.target.closest('[data-go]'), next = e.target.closest('[data-next]'), restart = e.target.closest('[data-restart]');
+    if (go) {
+      if (go.dataset.go === 'cards' && !startedAt) startedAt = Date.now();
+      show(go.dataset.go);
+    }
+    if (next) {
+      if (!canContinue(current)) { updateStatus(status(current).dataset.error); return; }
+      show(next.dataset.next);
+    }
+    if (restart) resetAll();
+  });
+
+  // ---------- Thank-you screen ----------
+  function showTopPick() {
+    var fig = form.querySelector('.top-pick'), img = document.getElementById('top-pick-img');
+    var d = selectedDesign();
+    var input = d || (picks[0] && Array.prototype.find.call(form.querySelectorAll('input[name="picks"]'), function (i) { return i.value === picks[0]; }));
+    fig.hidden = !input;
+    if (input) { var src = input.parentNode.querySelector('img'); img.src = src.src; img.alt = src.alt; }
+  }
+
+  // ---------- Draft (survives reloads) ----------
+  function saveDraft() {
+    write(DRAFT_KEY, {
+      screen: current, picks: picks, startedAt: startedAt, savedAt: Date.now(),
+      interest: (selectedInterest() || {}).value || '',
+      design: (selectedDesign() || {}).value || '',
+      uses: checked('uses'), concerns: checked('concerns'),
+      designNote: form.designNote.value, questions: form.questions.value
+    });
+  }
+  function loadDraft() {
+    var d = read(DRAFT_KEY, null);
+    if (!d || !d.savedAt || Date.now() - d.savedAt > IDLE_RESET_SECONDS * 1000) return show('intro', false);  // only resume a survey someone was just using
+    picks = (d.picks || []).filter(function (v) { return form.querySelector('input[name="picks"][value="' + CSS.escape(v) + '"]'); }).slice(0, MAX);
+    startedAt = d.startedAt || 0;
+    form.querySelectorAll('input[name="interest"]').forEach(function (r) { r.checked = r.value === d.interest; });
+    showDesigns();
+    form.querySelectorAll('input[name="design"]').forEach(function (r) { r.checked = !r.disabled && r.value === d.design; });
+    form.querySelectorAll('input[name="uses"]').forEach(function (c) { c.checked = (d.uses || []).indexOf(c.value) >= 0; });
+    form.querySelectorAll('input[name="concerns"]').forEach(function (c) { c.checked = (d.concerns || []).indexOf(c.value) >= 0; });
+    form.designNote.value = d.designNote || ''; form.questions.value = d.questions || '';
+    renderRanks();
+    show(d.screen && d.screen !== 'thanks' ? d.screen : 'intro', false);
+  }
+
+  // ---------- Submit + offline-safe sending ----------
+  function deviceId() {
+    try {
+      var d = localStorage.getItem(DEVICE_KEY);
+      if (!d) { d = 'd-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); localStorage.setItem(DEVICE_KEY, d); }
+      return d;
+    } catch (e) { return 'no-storage'; }
+  }
+
+  var flushing = false;
+  function flush() {
+    var pending = read(OUTBOX_KEY, []);
+    if (!SHEET_URL || flushing || !pending.length) return;
+    flushing = true;
+    Promise.all(pending.map(function (rec) {
+      return fetch(SHEET_URL, { method: 'POST', mode: 'no-cors', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(rec) })
+        .then(function () { return rec.id; }, function () { return null; });
+    })).then(function (sent) {
+      write(OUTBOX_KEY, read(OUTBOX_KEY, []).filter(function (r) { return sent.indexOf(r.id) < 0; }));
+      flushing = false;
+      if (read(OUTBOX_KEY, []).length) setTimeout(flush, 30000);
+    });
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var r = selectedInterest();
+    var rec = {
+      id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2),
+      at: new Date().toISOString(),
+      picks: picks.slice(),
+      design: (selectedDesign() || {}).value || '',
+      cardNote: '',
+      designNote: form.designNote.value,
+      interest: r ? r.value : '',
+      uses: checked('uses'),
+      branch: r ? r.dataset.branch : '',
+      concerns: checked('concerns'),
+      questions: form.questions.value,
+      v: 4, app: 'survey-ipad', k: TOKEN, hp: form.website.value, device: deviceId(),
+      secs: startedAt ? Math.round((Date.now() - startedAt) / 1000) : null,
+      tz: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
+      lang: navigator.language || '', ua: (navigator.userAgent || '').slice(0, 300),
+      screen: screen.width + 'x' + screen.height, touch: navigator.maxTouchPoints || 0,
+      webdriver: !!navigator.webdriver, geo: geo
+    };
+    write(OUTBOX_KEY, read(OUTBOX_KEY, []).concat(rec));
+    flush();
+    show('thanks');
+  });
+
+  // ---------- Approximate location (used to flag out-of-state spam) ----------
+  function loadGeo() {
+    try { var g = sessionStorage.getItem('ncmid-geo'); if (g) { geo = JSON.parse(g); return; } } catch (e) {}
+    function timeout(p, ms) { return Promise.race([p, new Promise(function (_, rej) { setTimeout(rej, ms); })]); }
+    timeout(fetch('https://ipwho.is/?fields=success,country_code,region,city').then(function (r) { return r.json(); }), 5000)
+      .then(function (j) { return j && j.success ? { country: j.country_code, region: j.region, city: j.city } : Promise.reject(); })
+      .catch(function () {
+        return timeout(fetch('https://ipapi.co/json/').then(function (r) { return r.json(); }), 5000)
+          .then(function (j) { return j && !j.error ? { country: j.country_code, region: j.region, city: j.city } : null; });
+      })
+      .then(function (g) { if (g) { geo = g; try { sessionStorage.setItem('ncmid-geo', JSON.stringify(g)); } catch (e) {} } }, function () {});
+  }
+
+  window.addEventListener('online', flush);
+  shuffleCards();
+  loadDraft();
+  flush();
+  loadGeo();
+})();
+</script>
+</body>
+</html>
