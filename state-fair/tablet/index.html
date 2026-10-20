@@ -56,13 +56,13 @@
   .slots { flex: 1; padding: 0 92px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 48px; align-content: start; }
   .slot { display: flex; flex-direction: column; }
   .slot.empty { visibility: hidden; }
-  .sky { position: relative; height: 303px; }
+  .sky { position: relative; height: 330px; }
 
   .balloon { position: absolute; left: 50%; width: 143px; height: 160.16px; border-radius: 50% 50% 47% 47%; }
   .balloon.popped { cursor: default; pointer-events: none; }
-  .b0 { top: 86px; margin-left: -156.5px; z-index: 7; --tilt: -15deg; }
-  .b1 { top: 15px; margin-left: -68.5px; z-index: 13; --tilt: -1deg; }
-  .b2 { top: 96px; margin-left: 14.5px; z-index: 6; --tilt: 13deg; }
+  .b0 { top: 102px; margin-left: -156.5px; z-index: 7; --tilt: -15deg; }
+  .b1 { top: 31px; margin-left: -68.5px; z-index: 13; --tilt: -1deg; }
+  .b2 { top: 112px; margin-left: 14.5px; z-index: 6; --tilt: 13deg; }
   .skin { position: absolute; inset: 0; border-radius: 50% 50% 47% 47%; transform-origin: 50% 125%; pointer-events: none;
     background: radial-gradient(circle at 33% 26%, rgba(255,255,255,.8), var(--hue) 45%, rgba(0,0,0,.4));
     box-shadow: 0 8px 18px rgba(0,0,0,.34), inset -5px -7px 14px rgba(0,0,0,.22);
@@ -70,9 +70,9 @@
     animation: bob 2.6s var(--delay) ease-in-out infinite; }
   .shine { position: absolute; left: 24%; top: 16%; width: 26%; height: 20%; border-radius: 50%; background: rgba(255,255,255,.45); }
   .string { position: absolute; left: 50%; top: 100%; width: 1px; transform-origin: top center; background: rgba(255,255,255,.3); transition: opacity .26s ease; pointer-events: none; }
-  .b0 .string { height: 102.25px; transform: rotate(-56.23deg); }
-  .b1 .string { height: 127.88px; transform: rotate(1.34deg); }
-  .b2 .string { height: 97.93px; transform: rotate(61.42deg); }
+  .b0 .string { height: 108.75px; transform: rotate(-51.4deg); }
+  .b1 .string { height: 138.87px; transform: rotate(1.24deg); }
+  .b2 .string { height: 103.64px; transform: rotate(56.08deg); }
   .balloon.popped .skin { transform: scale(1.6) rotate(var(--tilt)); opacity: 0; animation: none; }
   .balloon.popped .string { opacity: 0; }
 
@@ -163,8 +163,9 @@
   HOW TO EDIT
   • Any text you see on screen is in this file. Text that changes during the game lives in data-… attributes
     right on the element that shows it. {n}, {total}, {darts}, {Darts} and {name} are filled in by the game.
-  • The cards are in the "deck" list near the bottom. alt="" is the card name that's shown on screen AND saved to
-    the sheet, so it must match the CARDS list in Code.gs exactly.
+  • The cards are in the "deck" list near the bottom, grouped by subject. See the note there before renaming anything.
+  • Game order: sets of three #1 designs → final round of the player's top three → pick the best version of their
+    runner-up subject → pick the best version of their favorite subject.
   • Settings (sheet URL, password, number of darts) are at the top of the <script> at the bottom.
   • Lives at https://digital-solutions-development.github.io/mobile-id/state-fair/tablet/ — keep the cards/ folder next to this file.
 -->
@@ -177,18 +178,23 @@
       <div>
         <p class="eyebrow" id="set-label"
            data-set="Set {n} of {total}"
-           data-final="Final round — the three crowd favorites"
+           data-final="Final round — your three favorites"
+           data-refine2="Runner-up round · {row}"
+           data-refine1="Blue ribbon round · {row}"
            data-done="Blue ribbon awarded"></p>
         <h1 class="title" id="round-title"
             data-sets="Pop the balloons over your favorite cards!"
-            data-final="Final round: Choose among your favorites!"></h1>
+            data-final="Final round: Choose among your favorites!"
+            data-refine="Which {row} design do you like best?"></h1>
         <p class="hint" id="hint" role="status" aria-live="polite"
            data-start="Spend {darts} darts across these three however you like."
            data-final-start="These three won their rounds. {Darts} darts decide the ribbon."
            data-left="{n} darts left."
            data-left-one="1 dart left."
            data-out="Out of darts. Tap for the next three cards."
-           data-final-out="Darts spent — tap to crown the winner."
+           data-final-out="Darts spent — now pick the best designs."
+           data-refine-start="Three versions of {row}. {Darts} darts — pop the ones you like most."
+           data-refine-out="Darts spent — tap to keep going."
            data-done="{name} takes the blue ribbon."></p>
       </div>
       <div class="rack" id="rack">
@@ -238,16 +244,17 @@
         <button type="button" class="btn-next" id="next"
                 data-next-set="Next three →"
                 data-final="Final round →"
-                data-crown="Crown the winner →"></button>
+                data-refine2="Pick designs →"
+                data-refine1="Last round →"
+                data-crown="See my pick →"></button>
       </div>
     </footer>
 
     <div class="round-over" id="round-over" hidden>
       <div class="round-over-panel" role="dialog" aria-labelledby="round-over-text">
         <p class="round-over-text" id="round-over-text" data-text="All {darts} darts used!"></p>
-        <button type="button" class="btn-gold" id="round-over-next"
-                data-next="Go to next round →"
-                data-crown="Crown the winner →"></button>
+        <!-- this button uses the same label as the Next button in the footer -->
+        <button type="button" class="btn-gold" id="round-over-next"></button>
       </div>
     </div>
 
@@ -255,7 +262,7 @@
       <div class="results-head">
         <div>
           <p class="eyebrow">Final leaderboard</p>
-          <h2 class="results-title" id="results-title" data-text="{name} takes the blue ribbon"></h2>
+          <h2 class="results-title" id="results-title" data-text="{row} takes the blue ribbon"></h2>
         </div>
         <button type="button" class="btn-gold" id="next-player">Next player →</button>
       </div>
@@ -265,8 +272,7 @@
           <figcaption>
             <strong class="champ-name" id="champ-name"></strong>
             <span class="champ-score" id="champ-score"
-                  data-one="1 balloon popped all night"
-                  data-many="{n} balloons popped all night"></span>
+                  data-text="Your favorite version. Runner-up: {row2}, {design2}."></span>
           </figcaption>
         </figure>
         <ol class="board" id="board" aria-label="Runners-up"></ol>
@@ -289,25 +295,20 @@
 </section>
 
 <!-- ======================= THE DECK ======================= -->
-<!-- One line per card. alt="" must match CARDS in Code.gs. Order doesn't matter; the game shuffles. -->
+<!-- One <li> per subject. The FIRST image is the #1 design used in the opening rounds; the next two are its variations.
+     data-row is the subject name and alt="" is the design name. The sheet saves them as "Subject · Design",
+     so both must match BALLOON_ROWS in Code.gs exactly. -->
 <ul id="deck" hidden>
-  <li><img src="cards/card-11.webp" alt="Cardinal in the Dogwoods"></li>
-  <li><img src="cards/card-44.webp" alt="Moonlit Dogwood"></li>
-  <li><img src="cards/card-12.webp" alt="The Parkway"></li>
-  <li><img src="cards/card-23.webp" alt="Ridge After Ridge"></li>
-  <li><img src="cards/card-43.webp" alt="Smoky Morning"></li>
-  <li><img src="cards/card-13.webp" alt="Fair Night"></li>
-  <li><img src="cards/card-14.webp" alt="Sound &amp; Sea Grass"></li>
-  <li><img src="cards/card-41.webp" alt="Hatteras Light"></li>
-  <li><img src="cards/card-21.webp" alt="Ice Night"></li>
-  <li><img src="cards/card-22.webp" alt="Hoops at Dawn"></li>
-  <li><img src="cards/card-24.webp" alt="Flytrap Field"></li>
-  <li><img src="cards/card-31.webp" alt="Flytrap Study"></li>
-  <li><img src="cards/card-32.webp" alt="Flytrap Deco"></li>
-  <li><img src="cards/card-33.webp" alt="Whole Hog"></li>
-  <li><img src="cards/card-34.webp" alt="Hog &amp; Bandana"></li>
-  <li><img src="cards/card-51.webp" alt="Smoked With Care"></li>
-  <li><img src="cards/card-42.webp" alt="First in Flight"></li>
+  <li data-row="Blue Ridge Mountains"><img src="cards/blueridge-1.webp" alt="Gold poster"><img src="cards/blueridge-2.webp" alt="Teal &amp; coral"><img src="cards/blueridge-hot-sunset.webp" alt="Hot sunset"></li>
+  <li data-row="Linn Cove Viaduct"><img src="cards/linncove-1.webp" alt="Red sun poster"><img src="cards/linncove-teal.webp" alt="Teal &amp; coral"><img src="cards/linncove-autumn-day.webp" alt="Clear autumn day"></li>
+  <li data-row="Agriculture"><img src="cards/agriculture-1.webp" alt="Sunny farm"><img src="cards/agriculture-2.webp" alt="Pig &amp; bandana"><img src="cards/agriculture-vintage.webp" alt="Vintage print"></li>
+  <li data-row="Barn Quilt"><img src="cards/barnquilt-1.webp" alt="Watercolor autumn"><img src="cards/barnquilt-2.webp" alt="Red sky"><img src="cards/barnquilt-navy-gold.webp" alt="Navy &amp; gold"></li>
+  <li data-row="Coastal"><img src="cards/coastal-hatteras-blue.webp" alt="Hatteras blue"><img src="cards/coastal-1.webp" alt="Watercolor kites"><img src="cards/coastal-2.webp" alt="Red sky"></li>
+  <li data-row="Cape Hatteras"><img src="cards/hatteras-1.webp" alt="Bold blue"><img src="cards/hatteras-2.webp" alt="Faded print"><img src="cards/hatteras-3.webp" alt="Teal poster"></li>
+  <li data-row="Venus Fly Trap"><img src="cards/flytrap-4.webp" alt="Neon on black"><img src="cards/flytrap-1.webp" alt="Watercolor"><img src="cards/flytrap-2.webp" alt="Cosmic"></li>
+  <li data-row="First in Flight"><img src="cards/flight-1.webp" alt="Sunburst"><img src="cards/flight-4.webp" alt="Clean sky"><img src="cards/flight-5.webp" alt="Sunset rays"></li>
+  <li data-row="Bluegrass"><img src="cards/bluegrass-3.webp" alt="Banjo"><img src="cards/bluegrass-1.webp" alt="Porch band"><img src="cards/bluegrass-4.webp" alt="Fiddle on the porch"></li>
+  <li data-row="Sweet Potatoes"><img src="cards/sweetpotato-1.webp" alt="Truck bed"><img src="cards/sweetpotato-3.webp" alt="Close-up"><img src="cards/sweetpotato-vintage.webp" alt="Vintage print"></li>
 </ul>
 
 <template id="leader-tpl"><li class="leader"><img alt=""><span class="leader-votes"></span></li></template>
@@ -321,6 +322,7 @@
   var PASSWORD = 'firstinflight';    // not case-sensitive. This only keeps casual visitors out; it isn't real security.
   var DARTS = 5;                     // darts per set of three (must match BALLOON_DARTS in Code.gs)
   var FINAL_DARTS = 3;               // darts in the final round (must match FINAL_DARTS in Code.gs)
+  var REFINE_DARTS = 3;              // darts in each "best version" round (must match REFINE_DARTS in Code.gs)
   var OUTBOX_KEY = 'mdl-balloon-outbox', DEVICE_KEY = 'mdl-balloon-device', GATE_KEY = 'mdl-gate';
 
   // ---------- Elements ----------
@@ -329,12 +331,17 @@
   var setLabel = $('set-label'), title = $('round-title'), hint = $('hint'), rack = $('rack'), dartsEl = $('darts');
   var nextBtn = $('next'), roundOver = $('round-over'), roundOverText = $('round-over-text'), roundOverBtn = $('round-over-next');
   var results = $('results'), leadersEl = $('leaders'), boardEl = $('board');
-  var deck = Array.prototype.map.call(document.querySelectorAll('#deck img'), function (img) {
-    return { name: img.alt, src: img.getAttribute('src') };
+  var rows = Array.prototype.map.call(document.querySelectorAll('#deck li'), function (li) {
+    var row = li.dataset.row;
+    return { row: row, cards: Array.prototype.map.call(li.querySelectorAll('img'), function (img) {
+      return { name: row + ' · ' + img.alt, row: row, label: img.alt, src: img.getAttribute('src') };
+    }) };
   });
+  var deck = [].concat.apply([], rows.map(function (r) { return r.cards; }));
+  var primaries = rows.map(function (r) { return r.cards[0]; });
 
   // balloon positions (match the .b0/.b1/.b2 styles): sideways offset, lift from top, string drop
-  var GEOM = [{ off: -85, top: 164.65, drop: 56.84 }, { off: 3, top: 93.65, drop: 127.84 }, { off: 86, top: 174.65, drop: 46.84 }];
+  var GEOM = [{ off: -85, top: 180.65, drop: 67.84 }, { off: 3, top: 109.65, drop: 138.84 }, { off: 86, top: 190.65, drop: 57.84 }];
   var WORDS = { 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven' };
 
   // ---------- Helpers ----------
@@ -342,6 +349,9 @@
   function word(n) { return WORDS[n] || String(n); }
   function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
   function byName(n) { return deck.filter(function (c) { return c.name === n; })[0]; }
+  function rowCards(row) { var r = rows.filter(function (x) { return x.row === row; })[0]; return r ? r.cards : []; }
+  function isRefine() { return S.phase === 'refine2' || S.phase === 'refine1'; }
+  function bestOf(log) { var b = log[0]; log.forEach(function (x) { if (x.darts > b.darts) b = x; }); return b; }
   function shuffle(a) { a = a.slice(); for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
   function read(key, fallback) { try { return JSON.parse(localStorage.getItem(key)) || fallback; } catch (e) { return fallback; } }
   function write(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); } catch (e) {} }
@@ -349,7 +359,7 @@
   // ---------- Game state ----------
   var S;
   function makeSets() {
-    var order = shuffle(deck), out = [];
+    var order = shuffle(primaries), out = [];
     for (var i = 0; i < order.length; i += 3) out.push(order.slice(i, i + 3));
     var last = out[out.length - 1];
     if (last && last.length < 3) {
@@ -360,12 +370,15 @@
   }
   function newGame() {
     S = { sets: makeSets(), set: 0, pops: [], tally: {}, finals: [], champ: '', phase: 'sets',
-          startedAt: 0, setLog: [], finalLog: [], sent: false };
+          startedAt: 0, setLog: [], finalLog: [], refineLog: [], second: '', fav: '', sent: false };
   }
   function current() {
-    return S.phase === 'sets' ? (S.sets[S.set] || []) : S.finals.map(byName).filter(Boolean);
+    if (S.phase === 'sets') return S.sets[S.set] || [];
+    if (S.phase === 'final') return S.finals.map(byName).filter(Boolean);
+    if (S.phase === 'refine2') return rowCards(S.second);
+    return rowCards(byName(S.champ).row);
   }
-  function totalDarts() { return S.phase === 'final' ? FINAL_DARTS : DARTS; }
+  function totalDarts() { return S.phase === 'sets' ? DARTS : S.phase === 'final' ? FINAL_DARTS : REFINE_DARTS; }
   function dartsLeft() { return S.phase === 'done' ? 0 : Math.max(0, totalDarts() - S.pops.length); }
   function votesFor(name) { return S.pops.filter(function (k) { return k.split('|')[0] === name; }).length; }
   function touch() { if (!S.startedAt) S.startedAt = Date.now(); }
@@ -412,20 +425,28 @@
     touch();
     var set = current();
     var log = set.map(function (c) { return { card: c.name, darts: votesFor(c.name) }; });
-    S.pops.forEach(function (k) { var n = k.split('|')[0]; S.tally[n] = (S.tally[n] || 0) + 1; });
-
     if (S.phase === 'final') {
+      // rank the three finalists by final-round darts, then by darts from the opening sets
       S.finalLog = log;
-      var best = { name: S.finals[0] || '', n: 0 };
-      S.pops.forEach(function (k) { var n = k.split('|')[0], c = votesFor(n); if (c > best.n) best = { name: n, n: c }; });
-      S.champ = best.name; S.phase = 'done'; S.pops = [];
-      renderRound(); submit(); return;
+      var ranked = log.slice().sort(function (a, b) { return (b.darts - a.darts) || ((S.tally[b.card] || 0) - (S.tally[a.card] || 0)); });
+      S.champ = ranked[0].card; S.second = byName(ranked[1].card).row;
+      S.phase = 'refine2'; S.pops = []; renderRound(); return;
     }
+    if (S.phase === 'refine2') {
+      S.refineLog.push({ row: S.second, cards: log, winner: bestOf(log).card });
+      S.phase = 'refine1'; S.pops = []; renderRound(); return;
+    }
+    if (S.phase === 'refine1') {
+      var w = bestOf(log).card;
+      S.refineLog.push({ row: byName(S.champ).row, cards: log, winner: w });
+      S.fav = w; S.phase = 'done'; S.pops = []; renderRound(); submit(); return;
+    }
+    S.pops.forEach(function (k) { var n = k.split('|')[0]; S.tally[n] = (S.tally[n] || 0) + 1; });
     S.setLog.push(log);
     S.pops = [];
     if (S.set + 1 >= S.sets.length) {
       var finals = Object.keys(S.tally).sort(function (a, b) { return S.tally[b] - S.tally[a]; }).slice(0, 3);
-      shuffle(deck).forEach(function (c) { if (finals.length < 3 && finals.indexOf(c.name) < 0) finals.push(c.name); });
+      shuffle(primaries).forEach(function (c) { if (finals.length < 3 && finals.indexOf(c.name) < 0) finals.push(c.name); });
       S.finals = finals; S.phase = 'final';
     } else {
       S.set += 1;
@@ -448,7 +469,7 @@
       if (!card) return;
       var img = slot.querySelector('.card img');
       img.src = card.src; img.alt = card.name;
-      slot.querySelector('.card-name').textContent = card.name;
+      slot.querySelector('.card-name').textContent = isRefine() ? card.label : card.row;
     });
     update();
   }
@@ -457,14 +478,17 @@
     var set = current(), total = totalDarts(), left = dartsLeft(), used = S.pops.length, done = S.phase === 'done';
     var lastSet = S.set + 1 >= S.sets.length;
 
+    var champ = byName(S.champ), roundRow = set[0] ? set[0].row : '';
     setLabel.textContent = done ? setLabel.dataset.done
       : S.phase === 'final' ? setLabel.dataset.final
+      : isRefine() ? fill(setLabel.dataset[S.phase], { row: roundRow })
       : fill(setLabel.dataset.set, { n: S.set + 1, total: S.sets.length });
-    title.textContent = S.phase === 'sets' ? title.dataset.sets : title.dataset.final;
-    var champ = byName(S.champ);
-    hint.textContent = done ? fill(hint.dataset.done, { name: champ ? champ.name : '' })
-      : left === 0 ? (S.phase === 'final' ? hint.dataset.finalOut : hint.dataset.out)
-      : used === 0 ? (S.phase === 'final' ? fill(hint.dataset.finalStart, { Darts: cap(word(FINAL_DARTS)) }) : fill(hint.dataset.start, { darts: word(DARTS) }))
+    title.textContent = S.phase === 'sets' ? title.dataset.sets : isRefine() || done ? fill(title.dataset.refine, { row: roundRow }) : title.dataset.final;
+    hint.textContent = done ? fill(hint.dataset.done, { name: champ ? champ.row : '' })
+      : left === 0 ? (S.phase === 'final' ? hint.dataset.finalOut : isRefine() ? hint.dataset.refineOut : hint.dataset.out)
+      : used === 0 ? (S.phase === 'final' ? fill(hint.dataset.finalStart, { Darts: cap(word(FINAL_DARTS)) })
+                    : isRefine() ? fill(hint.dataset.refineStart, { row: roundRow, Darts: cap(word(REFINE_DARTS)) })
+                    : fill(hint.dataset.start, { darts: word(DARTS) }))
       : left === 1 ? hint.dataset.leftOne : fill(hint.dataset.left, { n: left });
 
     rack.hidden = done;
@@ -498,28 +522,30 @@
     leadersEl.innerHTML = '';
     Object.keys(S.tally).sort(function (a, b) { return S.tally[b] - S.tally[a]; }).slice(0, 4).forEach(function (n) {
       var li = $('leader-tpl').content.firstElementChild.cloneNode(true), c = byName(n);
-      li.querySelector('img').src = c.src; li.querySelector('img').alt = c.name;
+      li.querySelector('img').src = c.src; li.querySelector('img').alt = c.row;
       li.querySelector('.leader-votes').textContent = S.tally[n];
       leadersEl.appendChild(li);
     });
 
-    nextBtn.textContent = S.phase === 'final' ? nextBtn.dataset.crown : lastSet ? nextBtn.dataset.final : nextBtn.dataset.nextSet;
+    nextBtn.textContent = S.phase === 'refine1' ? nextBtn.dataset.crown : S.phase === 'refine2' ? nextBtn.dataset.refine1
+      : S.phase === 'final' ? nextBtn.dataset.refine2 : lastSet ? nextBtn.dataset.final : nextBtn.dataset.nextSet;
     nextBtn.classList.toggle('ready', left === 0);
 
     roundOver.hidden = !(left === 0 && !done);
     roundOverText.textContent = fill(roundOverText.dataset.text, { darts: word(total) });
-    roundOverBtn.textContent = S.phase === 'final' ? roundOverBtn.dataset.crown : roundOverBtn.dataset.next;
+    roundOverBtn.textContent = nextBtn.textContent;
 
     results.hidden = !done;
     if (done) renderResults(champ);
   }
 
   function renderResults(champ) {
-    var champVotes = champ ? (S.tally[champ.name] || 0) : 0;
-    $('results-title').textContent = fill($('results-title').dataset.text, { name: champ ? champ.name : '' });
-    $('champ-img').src = champ ? champ.src : ''; $('champ-img').alt = champ ? champ.name : '';
-    $('champ-name').textContent = champ ? champ.name : '';
-    var sc = $('champ-score'); sc.textContent = champVotes === 1 ? sc.dataset.one : fill(sc.dataset.many, { n: champVotes });
+    var fav = byName(S.fav) || champ, champVotes = champ ? (S.tally[champ.name] || 0) : 0;
+    var r2 = S.refineLog[0], second = r2 ? byName(r2.winner) : null;
+    $('results-title').textContent = fill($('results-title').dataset.text, { row: fav ? fav.row : '' });
+    $('champ-img').src = fav ? fav.src : ''; $('champ-img').alt = fav ? fav.name : '';
+    $('champ-name').textContent = fav ? fav.label : '';
+    var sc = $('champ-score'); sc.textContent = fill(sc.dataset.text, { row2: second ? second.row : '', design2: second ? second.label : '' });
     var ranked = Object.keys(S.tally).filter(function (n) { return !champ || n !== champ.name; })
       .sort(function (a, b) { return S.tally[b] - S.tally[a]; }).slice(0, 6);
     var max = Math.max(1, champVotes, ranked.length ? S.tally[ranked[0]] : 0);
@@ -528,7 +554,7 @@
       var li = $('board-tpl').content.firstElementChild.cloneNode(true), c = byName(n);
       li.querySelector('.board-rank').textContent = i + 2;
       li.querySelector('img').src = c.src; li.querySelector('img').alt = '';
-      li.querySelector('.board-name').textContent = c.name;
+      li.querySelector('.board-name').textContent = c.row;
       li.querySelector('.bar-fill').style.width = Math.max(6, (S.tally[n] / max) * 100) + '%';
       li.querySelector('.board-votes').textContent = S.tally[n];
       boardEl.appendChild(li);
@@ -551,7 +577,7 @@
       app: 'balloon-ipad', v: 1, k: TOKEN,
       id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : Date.now() + '-' + Math.random().toString(36).slice(2),
       at: new Date().toISOString(),
-      sets: S.setLog, finals: S.finalLog, champion: S.champ,
+      sets: S.setLog, finals: S.finalLog, champion: S.champ, refine: S.refineLog, favorite: S.fav,
       device: deviceId(),
       secs: S.startedAt ? Math.round((Date.now() - S.startedAt) / 1000) : null,
       tz: Intl.DateTimeFormat().resolvedOptions().timeZone || '',
