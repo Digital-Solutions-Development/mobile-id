@@ -324,7 +324,7 @@
       </fieldset>
 
       <fieldset class="block" style="margin-top:44px">
-        <legend class="field-label" style="padding-bottom:10px">Where would you want to use it? <span class="optional">(pick any/all)</span></legend>
+        <legend class="field-label" style="padding-bottom:10px;width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px"><span>Where would you want to use it? <span class="optional">(pick any/all)</span></span><button type="button" class="btn-link underline" data-select-all="uses" style="min-height:0;padding:12px 0 12px 12px;margin:-12px 0;flex:none">Select all</button></legend>
         <div class="chip-grid">
           <label class="opt chip"><input type="checkbox" name="uses" value="Airport security (TSA)"><span class="box" aria-hidden="true"></span>Airport security (TSA)</label>
           <label class="opt chip"><input type="checkbox" name="uses" value="Traffic stops"><span class="box" aria-hidden="true"></span>Traffic stops</label>
@@ -360,7 +360,7 @@
         <legend class="question-head">
           <span class="eyebrow">You said <span data-said-text></span></span>
           <h1 class="title" tabindex="-1">What would you want to know before you start?</h1>
-          <span class="hint" style="display:block">Pick any that apply.</span>
+          <span class="hint" style="display:flex;align-items:center;justify-content:space-between;gap:16px"><span>Pick any that apply.</span><button type="button" class="btn-link underline" data-select-all="concerns" style="min-height:0;padding:12px 0 12px 12px;margin:-12px 0;flex:none">Select all</button></span>
         </legend>
         <div class="chip-grid block" style="padding-top:10px">
           <label class="opt chip"><input type="checkbox" name="concerns" value="How to set it up"><span class="box" aria-hidden="true"></span>How to set it up</label>
@@ -376,7 +376,7 @@
         <legend class="question-head">
           <span class="eyebrow">You said <span data-said-text></span></span>
           <h1 class="title" tabindex="-1">What would help you decide?</h1>
-          <span class="hint" style="display:block">Pick any that apply.</span>
+          <span class="hint" style="display:flex;align-items:center;justify-content:space-between;gap:16px"><span>Pick any that apply.</span><button type="button" class="btn-link underline" data-select-all="concerns" style="min-height:0;padding:12px 0 12px 12px;margin:-12px 0;flex:none">Select all</button></span>
         </legend>
         <div class="chip-grid block" style="padding-top:10px">
           <label class="opt chip"><input type="checkbox" name="concerns" value="Knowing it’s secure"><span class="box" aria-hidden="true"></span>Knowing it’s secure</label>
@@ -392,7 +392,7 @@
         <legend class="question-head">
           <span class="eyebrow">You said <span data-said-text></span></span>
           <h1 class="title" tabindex="-1">What’s holding you back?</h1>
-          <span class="hint" style="display:block">Pick any that apply.</span>
+          <span class="hint" style="display:flex;align-items:center;justify-content:space-between;gap:16px"><span>Pick any that apply.</span><button type="button" class="btn-link underline" data-select-all="concerns" style="min-height:0;padding:12px 0 12px 12px;margin:-12px 0;flex:none">Select all</button></span>
         </legend>
         <div class="chip-grid block" style="padding-top:10px">
           <label class="opt chip"><input type="checkbox" name="concerns" value="Privacy of my data"><span class="box" aria-hidden="true"></span>Privacy of my data</label>
@@ -515,7 +515,7 @@
   function resetAll() {
     clearTimeout(thanksTimer); clearTimeout(idleTimer);
     shuffleCards();
-    form.reset(); picks = []; startedAt = 0; renderRanks();
+    form.reset(); picks = []; startedAt = 0; renderRanks(); syncSelectAll();
     show('intro', false);
   }
   function poke() {
@@ -576,8 +576,17 @@
     });
   }
 
+  // "Select all" flips to "Clear all" once every option is checked
+  function syncSelectAll() {
+    form.querySelectorAll('[data-select-all]').forEach(function (b) {
+      var boxes = b.closest('fieldset').querySelectorAll('input[name="' + b.dataset.selectAll + '"]');
+      b.textContent = Array.prototype.every.call(boxes, function (c) { return c.checked; }) ? 'Clear all' : 'Select all';
+    });
+  }
+
   form.addEventListener('change', function (e) {
     var t = e.target;
+    if (t.name === 'uses' || t.name === 'concerns' || t.name === 'interest') setTimeout(syncSelectAll, 0);
     if (t.name === 'picks') {
       if (t.checked) {
         if (picks.length >= MAX) { t.checked = false; updateStatus(status('cards').dataset.limit); return; }
@@ -599,6 +608,13 @@
   form.addEventListener('input', function (e) { if (e.target.tagName === 'TEXTAREA') saveDraft(); });
 
   form.addEventListener('click', function (e) {
+    var all = e.target.closest('[data-select-all]');
+    if (all) {
+      var boxes = all.closest('fieldset').querySelectorAll('input[name="' + all.dataset.selectAll + '"]');
+      var every = Array.prototype.every.call(boxes, function (c) { return c.checked; });
+      boxes.forEach(function (c) { c.checked = !every; });
+      syncSelectAll(); saveDraft(); return;
+    }
     var go = e.target.closest('[data-go]'), next = e.target.closest('[data-next]'), restart = e.target.closest('[data-restart]');
     if (go) {
       if (go.dataset.go === 'cards' && !startedAt) startedAt = Date.now();
@@ -639,7 +655,9 @@
     showDesigns();
     form.querySelectorAll('input[name="design"]').forEach(function (r) { r.checked = !r.disabled && r.value === d.design; });
     form.querySelectorAll('input[name="uses"]').forEach(function (c) { c.checked = (d.uses || []).indexOf(c.value) >= 0; });
+    syncSelectAll();
     form.querySelectorAll('input[name="concerns"]').forEach(function (c) { c.checked = (d.concerns || []).indexOf(c.value) >= 0; });
+    syncSelectAll();
     form.designNote.value = d.designNote || ''; form.questions.value = d.questions || '';
     renderRanks();
     show(d.screen && d.screen !== 'thanks' ? d.screen : 'intro', false);
