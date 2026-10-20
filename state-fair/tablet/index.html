@@ -200,6 +200,7 @@
           <label class="opt card"><input type="checkbox" name="picks" value="First in Flight · Sunburst"><span class="art"><img src="cards/flight-1.webp" alt="First in Flight"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
           <label class="opt card"><input type="checkbox" name="picks" value="Bluegrass · Banjo"><span class="art"><img src="cards/bluegrass-3.webp" alt="Bluegrass"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
           <label class="opt card"><input type="checkbox" name="picks" value="Sweet Potatoes · Truck bed"><span class="art"><img src="cards/sweetpotato-1.webp" alt="Sweet Potatoes"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
+<label class="opt card"><input type="checkbox" name="picks" value="Carolina Barbecue · Bandana pig"><span class="art"><img src="cards/bbq-1.webp" alt="Carolina Barbecue"><span class="rank" aria-hidden="true"></span></span><span class="visually-hidden rank-text"></span></label>
         </div>
       </fieldset>
 
@@ -277,6 +278,11 @@
           <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Truck bed"><span class="art"><img src="cards/sweetpotato-1.webp" alt="Sweet Potatoes, Truck bed"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Truck bed</span></label>
           <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Close-up"><span class="art"><img src="cards/sweetpotato-3.webp" alt="Sweet Potatoes, Close-up"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Close-up</span></label>
           <label class="opt design"><input type="radio" name="design" value="Sweet Potatoes · Vintage print"><span class="art"><img src="cards/sweetpotato-vintage.webp" alt="Sweet Potatoes, Vintage print"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Vintage print</span></label>
+        </div>
+        <div class="design-list" data-variations-for="Carolina Barbecue · Bandana pig" hidden>
+          <label class="opt design"><input type="radio" name="design" value="Carolina Barbecue · Bandana pig"><span class="art"><img src="cards/bbq-1.webp" alt="Carolina Barbecue, Bandana pig"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Bandana pig</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Carolina Barbecue · Smoked with care"><span class="art"><img src="cards/bbq-2.webp" alt="Carolina Barbecue, Smoked with care"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Smoked with care</span></label>
+          <label class="opt design"><input type="radio" name="design" value="Carolina Barbecue · Stencil"><span class="art"><img src="cards/bbq-3.webp" alt="Carolina Barbecue, Stencil"><span class="tick" aria-hidden="true">✓</span></span><span class="design-name">Stencil</span></label>
         </div>
       </fieldset>
 
@@ -675,7 +681,7 @@
       designNote: form.designNote.value,
       interest: r ? r.value : '',
       uses: checked('uses'),
-      branch: r ? r.dataset.branch : '',
+      branch: r ? r.dataset.branch : 'maybe',   // skipped step 3 → neutral group (matches Code.gs)
       concerns: checked('concerns'),
       questions: form.questions.value,
       v: 4, app: 'survey-ipad', k: TOKEN, hp: form.website.value, device: deviceId(),
